@@ -1,17 +1,19 @@
 import React from "react";
 import { useSession } from "next-auth/react";
-import { FiMoreVertical } from "react-icons/fi";
 import Image from "next/image";
+import Avatar from "@/assets/images/avatar.png"
 
 const UserCard: React.FC = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="border-t flex p-2 gap-2">
+    <div className="flex p-2 gap-2">
       <Image
-        src="https://ui-avatars.com/api/?background=55c271&color=fff&bold=true"
+        src={Avatar}
         alt=""
         className="w-8 h-8 rounded-md"
+        width={50}
+        height={50}
       />
       <div
         className={`flex justify-between items-center overflow-hidden translate-all "w-52 ml-3"`}
@@ -20,7 +22,6 @@ const UserCard: React.FC = () => {
           <h4 className="font-semibold text-white">{session?.user?.name}</h4>
           <span className="text-xs text-white">{session?.user?.email}</span>
         </div>
-        <FiMoreVertical size={20} className="text-white" />
       </div>
     </div>
   );
