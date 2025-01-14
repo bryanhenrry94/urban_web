@@ -4,6 +4,7 @@ import MenuList from "@/components/layouts/PrivateLayout/MenuList";
 import UserCard from "@/components/ui/UserCard";
 import AppLogo from "@/components/ui/AppLogo";
 import { useSession } from "next-auth/react";
+import { Session } from "next-auth";
 import { FiMoreVertical } from "react-icons/fi";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -15,8 +16,10 @@ interface PrivateLayoutProps {
 const PrivateLayout: React.FC<PrivateLayoutProps> = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  const { data: session } = useSession();
-
+  const { data: session } = useSession() as {
+    data: (Session & { user: { id: string } }) | null;
+  };
+  
   const handleLinkClick = () => {
     setIsSidebarOpen(false); // Cierra el sidebar automáticamente en modo móvil
   };

@@ -1,10 +1,13 @@
 import React, { ReactNode } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
+import { Session } from "next-auth";
 import { MdLogout } from "react-icons/md";
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
-  const { data: session } = useSession();
+  const { data: session } = useSession() as {
+    data: (Session & { user: { id: string } }) | null;
+  };
 
   return (
     <div className="flex flex-col min-h-screen">

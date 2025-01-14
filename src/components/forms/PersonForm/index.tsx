@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { APICompany, Person } from "@/types";
+import { APICompany } from "@/types";
 import {
   savePerson,
   updatePerson,
@@ -88,7 +88,7 @@ const PersonForm: FC<{ id?: string }> = ({ id }) => {
     }
   }, [id, loadUser]);
 
-  const onSubmit = async (data: Person) => {
+  const onSubmit = async (data: FormData) => {
     try {
       if (modeEdit) {
         if (!id) return;

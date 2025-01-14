@@ -1,13 +1,12 @@
-export interface Person {
+export type Person = {
+  phone?: yup.Maybe<string | undefined>;
+  address?: yup.Maybe<string | undefined>;
+  companyName?: yup.Maybe<string | undefined>;
   name: string;
+  email: string;
   idType: string;
   idNumber: string;
-  email: string;
-  phone?: string | null;
-  address?: string | null;
-  roles: string[];
-  companyName?: string | null;
-  logo?: string | null;
+  roles: (string | undefined)[];
   companyId: string;
 }
 
