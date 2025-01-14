@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { LuUserCog } from "react-icons/lu";
 import { LuSettings2 } from "react-icons/lu";
@@ -44,10 +44,10 @@ const items = [
 ];
 
 const MenuList = ({ handleLinkClick }) => {
-  const [activeItem, setActiveItem] = useState(null);
-
   const handleItemClick = (id) => {
-    setActiveItem(id);
+    items.forEach((item) => {
+      item.active = item._id === id;
+    });
     handleLinkClick(id);
   };
 
@@ -58,7 +58,6 @@ const MenuList = ({ handleLinkClick }) => {
           key={item._id}
           item={item}
           handleItemClick={handleItemClick}
-          isActive={item._id === activeItem}
         />
       ))}
       <hr className="my-2 border-gray-300" />

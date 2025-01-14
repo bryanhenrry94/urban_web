@@ -25,7 +25,7 @@ const PrivateLayout: React.FC<PrivateLayoutProps> = ({ children }) => {
       <div className="flex flex-1">
         {/* Sidebar */}
         <aside
-          className={`fixed flex flex-col justify-between inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 lg:translate-x-0 bg-white ${
+          className={`fixed flex flex-col justify-between inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 lg:translate-x-0 bg-white shadow-sm ${
             isSidebarOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >
@@ -43,17 +43,24 @@ const PrivateLayout: React.FC<PrivateLayoutProps> = ({ children }) => {
         {/* Main content */}
         <div className="flex flex-col flex-1 lg:ml-64">
           {/* Navbar */}
-          <header className="flex items-center justify-between bg-white px-4 py-3 shadow-lg">
+          <header className="flex items-center justify-between lg:justify-end bg-white px-4 py-3 shadow-sm">
             <button
               className="text-teal-600 focus:outline-none lg:hidden hover:text-teal-800"
               onClick={() => setIsSidebarOpen(!isSidebarOpen)}
             >
               <LuMenu size={20} />
             </button>
-            <h1 className="text-lg font-semibold">Dashboard</h1>
             <div className="flex items-center gap-1">
-              <Image src={Avatar} alt="Avatar" width={40} height={40} className="rounded-full"/>
-              <span className="font-normal text-sm">{session?.user?.name}</span>
+              <Image
+                src={Avatar}
+                alt="Avatar"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              <span className="font-normal text-sm hidden md:block">
+                {session?.user?.name}
+              </span>
             </div>
           </header>
 
