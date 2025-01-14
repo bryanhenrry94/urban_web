@@ -12,7 +12,7 @@ const UserPage = () => {
         ]}
       />
       <div className="flex flex-col mb-4 rounded-sm shadow-sm">
-        <div className="w-full bg-green-500 p-2 text-white font-extrabold rounded-t-md">
+        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
           Registro de Usuario
         </div>
         <UserForm />

@@ -10,21 +10,21 @@ const MenuItem = ({ item, handleItemClick }) => {
       }}
       className={`
         relative flex items-center py-2 px-3 my-1
-        font-medium rounded-md cursor-pointer text-white
-        transition-colors group
+        font-medium rounded-md cursor-pointer text-gray-600  
+        
         ${
           item.active
-            ? "bg-gradient-to-tr from-green-600 to-green-700 text-green-800"
-            : "hover:bg-green-600 text-gray-600"
+            ? "bg-gradient-to-tr from-teal-600 to-teal-700 text-white"
+            : "hover:bg-teal-600 hover:text-white"
         }
         `}
     >
       {item.icon}
-      <span className={`overflow-hidden transition-all w-52 ml-3`}>
+      <span className={`overflow-hidden w-52 ml-3`}>
         {item.name}
       </span>
       {item.alert && (
-        <div className={`absolute right-2 w-2 h-2 rounded bg-green-400`} />
+        <div className={`absolute right-2 w-2 h-2 rounded bg-teal-400`} />
       )}
     </Link>
   );

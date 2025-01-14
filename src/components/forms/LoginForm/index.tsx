@@ -84,7 +84,7 @@ const LoginForm = () => {
 
         <button
           type="submit"
-          className="w-full rounded-lg bg-green-500 p-2 text-white font-bold hover:bg-green-600"
+          className="w-full rounded-lg bg-teal-500 p-2 text-white font-bold hover:bg-teal-600"
         >
           Ingresar
         </button>

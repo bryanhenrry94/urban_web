@@ -196,7 +196,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
         <div className="flex w-full">
           <button
             type="submit"
-            className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-200"
+            className="bg-teal-600 text-white py-2 px-4 rounded hover:bg-teal-700 transition duration-200"
           >
             {modeEdit ? "Actualizar" : "Guardar"}
           </button>

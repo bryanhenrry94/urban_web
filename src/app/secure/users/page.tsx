@@ -101,14 +101,14 @@ const UsersPage: React.FC = () => {
           </button>
           <button
             onClick={() => router.push("/secure/users/user")}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
           >
             <MdAdd />
           </button>
         </div>
       </div>
       <div className="flex flex-col mb-4 rounded-md shadow-sm">
-        <div className="w-full bg-green-500 p-2 text-white font-extrabold rounded-t-md">
+        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
           Búsqueda
         </div>
         <div className="flex gap-2 p-4 border-b-2 items-center">
@@ -162,7 +162,7 @@ const UsersPage: React.FC = () => {
                   <div
                     className={`px-2 py-1 rounded-md ${
                       user.status === "Active"
-                        ? "bg-green-100 text-green-800"
+                        ? "bg-teal-100 text-teal-800"
                         : "bg-red-100 text-red-800"
                     }`}
                   >
@@ -173,7 +173,7 @@ const UsersPage: React.FC = () => {
                   <div className="flex justify-center gap-2 items-center">
                     <button
                       onClick={() => handleEditUser(user._id)}
-                      className="bg-green-500 p-2 rounded-md text-white font-bold"
+                      className="bg-teal-500 p-2 rounded-md text-white font-bold"
                     >
                       <MdEdit />
                     </button>

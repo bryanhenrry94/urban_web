@@ -232,7 +232,7 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
         <div className="flex w-full">
           <button
             type="submit"
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
           >
             {modeEdit ? "Actualizar" : "Guardar"}
           </button>

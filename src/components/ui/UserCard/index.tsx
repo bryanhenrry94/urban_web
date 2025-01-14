@@ -7,7 +7,7 @@ const UserCard: React.FC = () => {
   const { data: session } = useSession();
 
   return (
-    <div className="flex p-2 gap-2">
+    <div className="flex p-2 gap-2 bg-teal-800 rounded-lg">
       <Image
         src={Avatar}
         alt=""

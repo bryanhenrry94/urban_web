@@ -30,7 +30,7 @@ const NotificationsForm: React.FC = () => {
           id="emailNotifications"
           checked={emailNotifications}
           onChange={(e) => setEmailNotifications(e.target.checked)}
-          className="w-5 h-5 text-green-600 rounded focus:ring focus:ring-green-300 focus:outline-none"
+          className="w-5 h-5 text-teal-600 rounded focus:ring focus:ring-teal-300 focus:outline-none"
         />
       </div>
 
@@ -44,7 +44,7 @@ const NotificationsForm: React.FC = () => {
           id="smsNotifications"
           checked={smsNotifications}
           onChange={(e) => setSmsNotifications(e.target.checked)}
-          className="w-5 h-5 text-green-600 rounded focus:ring focus:ring-green-300 focus:outline-none"
+          className="w-5 h-5 text-teal-600 rounded focus:ring focus:ring-teal-300 focus:outline-none"
         />
       </div>
 
@@ -61,14 +61,14 @@ const NotificationsForm: React.FC = () => {
           id="pushNotifications"
           checked={pushNotifications}
           onChange={(e) => setPushNotifications(e.target.checked)}
-          className="w-5 h-5 text-green-600 rounded focus:ring focus:ring-green-300 focus:outline-none"
+          className="w-5 h-5 text-teal-600 rounded focus:ring focus:ring-teal-300 focus:outline-none"
         />
       </div>
 
       {/* Submit Button */}
       <button
         type="submit"
-        className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-200"
+        className="bg-teal-600 text-white py-2 px-4 rounded hover:bg-teal-700 transition duration-200"
       >
         Guardar
       </button>

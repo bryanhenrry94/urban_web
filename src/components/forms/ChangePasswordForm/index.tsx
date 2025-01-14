@@ -133,7 +133,7 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
         </div>
         <div className="flex items-center justify-between mt-4">
           <button
-            className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-200"
+            className="bg-teal-600 text-white py-2 px-4 rounded hover:bg-teal-700 transition duration-200"
             type="submit"
           >
             Guardar

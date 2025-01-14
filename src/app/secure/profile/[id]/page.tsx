@@ -15,7 +15,7 @@ const ChangePasswordPage: FC = () => {
         <Breadcrumb items={[{ href: "/secure/profile", label: "Perfil" }]} />
       </div>
       <div className="flex flex-col mb-4 rounded-md shadow-sm">
-        <div className="w-full bg-green-500 p-2 text-white font-extrabold rounded-t-md">
+        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
           Actualizar contraseña
         </div>
         <div className="flex gap-2 p-4 border-b-2 items-center">

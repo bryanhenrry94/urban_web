@@ -74,14 +74,14 @@ const PeoplePage: React.FC = () => {
           </button>
           <button
             onClick={() => router.push("/secure/people/person")}
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
           >
             <MdAdd />
           </button>
         </div>
       </div>
       <div className="flex flex-col mb-4 rounded-md shadow-sm">
-        <div className="w-full bg-green-500 p-2 text-white font-extrabold rounded-t-md">
+        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
           Búsqueda
         </div>
         <div className="flex gap-2 p-4 border-b-2 items-center">
@@ -147,7 +147,7 @@ const PeoplePage: React.FC = () => {
                     {person.roles.map((role, index) => (
                       <div
                         key={index}
-                        className="bg-green-100 text-green-800 px-2 py-1 rounded-md"
+                        className="bg-teal-100 text-teal-800 px-2 py-1 rounded-md"
                       >
                         {role}
                       </div>
@@ -169,7 +169,7 @@ const PeoplePage: React.FC = () => {
                   <div className="flex justify-center gap-2 items-center">
                     <button
                       onClick={() => handleEditPerson(person._id)}
-                      className="bg-green-500 p-2 rounded-md text-white font-bold"
+                      className="bg-teal-500 p-2 rounded-md text-white font-bold"
                     >
                       <MdEdit />
                     </button>
