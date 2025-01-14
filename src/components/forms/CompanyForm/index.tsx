@@ -117,8 +117,8 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap gap-4">
-        <div className="flex flex-col w-full lg:w-1/4 mb-4">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col w-full lg:w-1/4">
           <label htmlFor="ruc" className="font-normal text-md mb-1">
             RUC:
           </label>
@@ -134,7 +134,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             {errors.ruc?.message}
           </p>
         </div>
-        <div className="flex flex-col w-full lg:w-1/2 mb-4">
+        <div className="flex flex-col w-full lg:w-1/2">
           <label htmlFor="name" className="font-normal text-md mb-1">
             Nombre:
           </label>
@@ -149,7 +149,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             {errors.name?.message}
           </p>
         </div>
-        <div className="flex flex-col w-full lg:w-1/2 mb-4">
+        <div className="flex flex-col w-full lg:w-1/2">
           <label htmlFor="address" className="font-normal text-md mb-1">
             Dirección:
           </label>
@@ -161,7 +161,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             placeholder="Dirección"
           />
         </div>
-        <div className="flex flex-col w-full lg:w-1/4 mb-4">
+        <div className="flex flex-col w-full lg:w-1/4">
           <label htmlFor="phone" className="font-normal text-md mb-1">
             Teléfono:
           </label>
@@ -173,7 +173,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             placeholder="Teléfono"
           />
         </div>
-        <div className="flex flex-col w-full lg:w-1/2 mb-4">
+        <div className="flex flex-col w-full lg:w-1/2">
           <label htmlFor="email" className="font-normal text-md mb-1">
             Correo:
           </label>

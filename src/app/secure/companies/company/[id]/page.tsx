@@ -10,15 +10,15 @@ const CompanyEdit = () => {
   const { id } = params as { id: string }; // Obtiene el parámetro dinámico "id"
 
   return (
-    <div>
+    <div className="bg-white p-4 rounded-sm shadow-sm">
       <Breadcrumb
         items={[
           { href: "/secure/companies", label: "Empresas" },
-          { label: "Editar" },
+          { label: "Nuevo" },
         ]}
       />
-      <div className="flex flex-col mb-4 rounded-sm shadow-sm">
-        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
+      <div className="flex flex-col spaces-y-2 rounded-sm shadow-sm">
+        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md mb-2">
           Registro de Empresa
         </div>
         <CompanyForm id={id} />

@@ -62,8 +62,8 @@ const PeoplePage: React.FC = () => {
   };
 
   return (
-    <div className="bg-white p-4 rounded-md">
-      <div className="flex justify-between items-center mb-4">
+    <div className="p-4 rounded-md">
+      <div className="flex justify-between items-center mb-4 ">
         <Breadcrumb items={[{ href: "/secure/people", label: "Personas" }]} />
         <div className="flex gap-2">
           <button
@@ -80,114 +80,158 @@ const PeoplePage: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col mb-4 rounded-md shadow-sm">
-        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
-          Búsqueda
+      <div className="hidden md:block">
+        <div className="flex flex-col mb-4 rounded-md shadow-sm bg-white">
+          <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
+            Búsqueda
+          </div>
+          <div className="flex gap-2 p-4 border-b-2 items-center">
+            <label htmlFor="filtro" className="font-bold text-md">
+              Filtro:
+            </label>
+            <input
+              id="filtro"
+              type="text"
+              className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            />
+          </div>
         </div>
-        <div className="flex gap-2 p-4 border-b-2 items-center">
-          <label htmlFor="filtro" className="font-bold text-md">
-            Filtro:
-          </label>
-          <input
-            id="filtro"
-            type="text"
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-          />
+        <div className="overflow-x-auto rounded-md shadow-md bg-white">
+          <table className="min-w-full border-collapse">
+            <thead className="font-bold">
+              <tr>
+                <th className="px-4 py-2">Persona</th>
+                {/* <th className="px-4 py-2">Razon Social</th> */}
+                {/* <th className="px-4 py-2">Dirección</th> */}
+                <th className="px-4 py-2">Roles</th>
+                <th className="px-4 py-2">Empresa</th>
+                <th className="px-4 py-2">Creado</th>
+                <th className="px-4 py-2">Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+              {people.map((person) => (
+                <tr key={person?._id}>
+                  <td className="px-4 py-2">
+                    <div className="flex flex-col">
+                      <div className="flex gap-2 items-center">
+                        <Image
+                          src={person.logo || LogoDefault}
+                          alt={`Logo of ${person.name}`}
+                          width={50}
+                          height={50}
+                        />
+                        <div>
+                          <span className="text-md font-semibold">
+                            {person.name}
+                          </span>
+                          <div className="flex gap-2 items-center">
+                            <MdEmail size={20} />
+                            <p className="text-sm text-gray-500">
+                              {person.email}
+                            </p>
+                          </div>
+                          <div className="flex gap-2 items-center">
+                            <MdContactPhone size={20} />
+                            <p className="text-sm text-gray-500">
+                              {person.phone}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  {/* <td className="px-4 py-2">{person.companyName}</td>
+                <td className="px-4 py-2">{person.address}</td> */}
+                  <td className="px-4 py-2">
+                    <div className="flex flex-wrap gap-2">
+                      {person.roles.map((role, index) => (
+                        <div
+                          key={index}
+                          className="bg-teal-100 text-teal-800 px-2 py-1 rounded-md"
+                        >
+                          {role}
+                        </div>
+                      ))}
+                    </div>
+                  </td>
+                  <td className="px-4 py-2">
+                    <div className="flex flex-col">
+                      <span className="text-md font-semibold">
+                        {person?.companyId?.name}
+                      </span>
+                      <div className="text-sm text-gray-500">
+                        <strong>RUC:</strong> {person?.companyId?.ruc}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-2">{person.createdAt}</td>
+                  <td className="px-4 py-2">
+                    <div className="flex justify-center gap-2 items-center">
+                      <button
+                        onClick={() => handleEditPerson(person._id)}
+                        className="bg-teal-500 p-2 rounded-md text-white font-bold"
+                      >
+                        <MdEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDeletePerson(person._id)}
+                        className="bg-red-500 p-2 rounded-md text-white font-bold"
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="p-2 text-center">
+            Mostrando {people.length} empresas
+          </div>
         </div>
       </div>
-      <div className="overflow-x-auto rounded-md shadow-md">
-        <table className="min-w-full border-collapse">
-          <thead className="font-bold">
-            <tr>
-              <th className="px-4 py-2">Persona</th>
-              {/* <th className="px-4 py-2">Razon Social</th> */}
-              {/* <th className="px-4 py-2">Dirección</th> */}
-              <th className="px-4 py-2">Roles</th>
-              <th className="px-4 py-2">Empresa</th>
-              <th className="px-4 py-2">Creado</th>
-              <th className="px-4 py-2">Accion</th>
-            </tr>
-          </thead>
-          <tbody>
-            {people.map((person) => (
-              <tr key={person?._id}>
-                <td className="px-4 py-2">
-                  <div className="flex flex-col">
-                    <div className="flex gap-2 items-center">
-                      <Image
-                        src={person.logo || LogoDefault}
-                        alt={`Logo of ${person.name}`}
-                        width={50}
-                        height={50}
-                      />
-                      <div>
-                        <span className="text-md font-semibold">
-                          {person.name}
-                        </span>
-                        <div className="flex gap-2 items-center">
-                          <MdEmail size={20} />
-                          <p className="text-sm text-gray-500">
-                            {person.email}
-                          </p>
-                        </div>
-                        <div className="flex gap-2 items-center">
-                          <MdContactPhone size={20} />
-                          <p className="text-sm text-gray-500">
-                            {person.phone}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                {/* <td className="px-4 py-2">{person.companyName}</td>
-                <td className="px-4 py-2">{person.address}</td> */}
-                <td className="px-4 py-2">
-                  <div className="flex flex-wrap gap-2">
-                    {person.roles.map((role, index) => (
-                      <div
-                        key={index}
-                        className="bg-teal-100 text-teal-800 px-2 py-1 rounded-md"
-                      >
-                        {role}
-                      </div>
-                    ))}
-                  </div>
-                </td>
-                <td className="px-4 py-2">
-                  <div className="flex flex-col">
-                    <span className="text-md font-semibold">
-                      {person?.companyId?.name}
-                    </span>
-                    <div className="text-sm text-gray-500">
-                      <strong>RUC:</strong> {person?.companyId?.ruc}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-4 py-2">{person.createdAt}</td>
-                <td className="px-4 py-2">
-                  <div className="flex justify-center gap-2 items-center">
-                    <button
-                      onClick={() => handleEditPerson(person._id)}
-                      className="bg-teal-500 p-2 rounded-md text-white font-bold"
-                    >
-                      <MdEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeletePerson(person._id)}
-                      className="bg-red-500 p-2 rounded-md text-white font-bold"
-                    >
-                      <MdDelete />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="p-2 text-center">
-          Mostrando {people.length} empresas
-        </div>
+      <div className="md:hidden">
+        {people.map((person) => (
+          <div
+            key={person._id}
+            className="flex flex-col border-b-2 p-2 bg-white rounded-md shadow-md mb-4"
+          >
+            <div className="flex gap-2 items-center">
+              <Image
+                src={person.logo || LogoDefault}
+                alt={`Logo of ${person.name}`}
+                width={50}
+                height={50}
+              />
+              <div>
+                <span className="text-md font-semibold">{person.name}</span>
+                <div className="flex gap-2 items-center">
+                  <MdEmail size={20} />
+                  <p className="text-sm text-gray-500">{person.email}</p>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <MdContactPhone size={20} />
+                  <p className="text-sm text-gray-500">{person.phone}</p>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-2 mt-2">
+              <button
+                onClick={() => handleEditPerson(person._id)}
+                className="bg-teal-500 p-2 rounded-md text-white font-bold"
+              >
+                <MdEdit />
+              </button>
+              <button
+                onClick={() => handleDeletePerson(person._id)}
+                className="bg-red-500 p-2 rounded-md text-white font-bold"
+              >
+                <MdDelete />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -58,9 +58,11 @@ const CompaniesPage: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="p-4 rounded-md">
       <div className="flex justify-between items-center mb-4">
-        <Breadcrumb items={[{ href: "/secure/companies", label: "Empresas" }]} />
+        <Breadcrumb
+          items={[{ href: "/secure/companies", label: "Empresas" }]}
+        />
         <div className="flex gap-2">
           <button
             onClick={() => router.push("/secure/companies/import")}
@@ -76,104 +78,165 @@ const CompaniesPage: React.FC = () => {
           </button>
         </div>
       </div>
-      <div className="flex flex-col mb-4 rounded-md shadow-sm">
-        <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
-          Búsqueda
+      <div className="hidden md:block">
+        <div className="flex flex-col mb-4 rounded-md shadow-sm bg-white">
+          <div className="w-full bg-teal-500 p-2 text-white font-extrabold rounded-t-md">
+            Búsqueda
+          </div>
+          <div className="flex gap-2 p-4 border-b-2 items-center">
+            <label htmlFor="filtro" className="font-bold text-md">
+              Filtro:
+            </label>
+            <input
+              id="filtro"
+              type="text"
+              className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            />
+          </div>
         </div>
-        <div className="flex gap-2 p-4 border-b-2 items-center">
-          <label htmlFor="filtro" className="font-bold text-md">
-            Filtro:
-          </label>
-          <input
-            id="filtro"
-            type="text"
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-          />
+        <div className="overflow-x-auto rounded-md shadow-md bg-white">
+          <table className="min-w-full border-collapse">
+            <thead className="font-bold">
+              <tr>
+                <th className="px-4 py-2">Logo</th>
+                <th className="px-4 py-2">Nombre</th>
+                <th className="px-4 py-2">Contacto</th>
+                <th className="px-4 py-2">Creado</th>
+                <th className="px-4 py-2">API KEY</th>
+                <th className="px-4 py-2">Accion</th>
+              </tr>
+            </thead>
+            <tbody>
+              {companies.map((company) => (
+                <tr key={company?._id}>
+                  <td className="px-4 py-2">
+                    <div>
+                      <Image
+                        src={company.logo || LogoDefault}
+                        alt={`Logo of ${company.name}`}
+                        width={50}
+                        height={50}
+                      />
+                    </div>
+                  </td>
+                  <td className="px-4 py-2">
+                    <div className="flex flex-col">
+                      <span className="text-md font-bold">{company.name}</span>
+                      <div className="text-sm text-gray-500">
+                        <strong>RUC:</strong> {company.ruc}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-2">
+                    <div>
+                      <strong>Direccion:</strong> {company.address}
+                    </div>
+                    <div>
+                      <strong>Telefono:</strong> {company.phone}
+                    </div>
+                    <div>
+                      <strong>Email:</strong> {company.email}
+                    </div>
+                  </td>
+                  <td className="px-4 py-2">{company.createdAt}</td>
+                  <td className="px-4 py-2 text-center">
+                    <button
+                      className="bg-gray-500 p-2 rounded-md text-white font-bold"
+                      onClick={() => {
+                        navigator.clipboard.writeText(company.apiKey);
+                        Swal.fire(
+                          "Aviso",
+                          "La API KEY ha sido copiada al portapapeles",
+                          "success"
+                        );
+                      }}
+                    >
+                      <MdOutlineContentCopy />
+                    </button>
+                  </td>
+                  <td className="px-4 py-2">
+                    <div className="flex justify-center gap-2 items-center">
+                      <button
+                        onClick={() => handleEditCompany(company._id)}
+                        className="bg-teal-500 p-2 rounded-md text-white font-bold"
+                      >
+                        <MdEdit />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCompany(company._id)}
+                        className="bg-red-500 p-2 rounded-md text-white font-bold"
+                      >
+                        <MdDelete />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="p-2 text-center">
+            Mostrando {companies.length} empresas
+          </div>
         </div>
       </div>
-      <div className="overflow-x-auto rounded-md shadow-md">
-        <table className="min-w-full border-collapse">
-          <thead className="font-bold">
-            <tr>
-              <th className="px-4 py-2">Logo</th>
-              <th className="px-4 py-2">Nombre</th>
-              <th className="px-4 py-2">Contacto</th>
-              <th className="px-4 py-2">Creado</th>
-              <th className="px-4 py-2">API KEY</th>
-              <th className="px-4 py-2">Accion</th>
-            </tr>
-          </thead>
-          <tbody>
-            {companies.map((company) => (
-              <tr key={company?._id}>
-                <td className="px-4 py-2">
-                  <div>
-                    <Image
-                      src={company.logo || LogoDefault}
-                      alt={`Logo of ${company.name}`}
-                      width={50}
-                      height={50}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-2">
-                  <div className="flex flex-col">
-                    <span className="text-md font-bold">{company.name}</span>
-                    <div className="text-sm text-gray-500">
-                      <strong>RUC:</strong> {company.ruc}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-4 py-2">
-                  <div>
-                    <strong>Direccion:</strong> {company.address}
-                  </div>
-                  <div>
-                    <strong>Telefono:</strong> {company.phone}
-                  </div>
-                  <div>
-                    <strong>Email:</strong> {company.email}
-                  </div>
-                </td>
-                <td className="px-4 py-2">{company.createdAt}</td>
-                <td className="px-4 py-2 text-center">
-                  <button
-                    className="bg-gray-500 p-2 rounded-md text-white font-bold"
-                    onClick={() => {
-                      navigator.clipboard.writeText(company.apiKey);
-                      Swal.fire(
-                        "Aviso",
-                        "La API KEY ha sido copiada al portapapeles",
-                        "success"
-                      );
-                    }}
-                  >
-                    <MdOutlineContentCopy />
-                  </button>
-                </td>
-                <td className="px-4 py-2">
-                  <div className="flex justify-center gap-2 items-center">
-                    <button
-                      onClick={() => handleEditCompany(company._id)}
-                      className="bg-teal-500 p-2 rounded-md text-white font-bold"
-                    >
-                      <MdEdit />
-                    </button>
-                    <button
-                      onClick={() => handleDeleteCompany(company._id)}
-                      className="bg-red-500 p-2 rounded-md text-white font-bold"
-                    >
-                      <MdDelete />
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <div className="p-2 text-center">
-          Mostrando {companies.length} empresas
-        </div>
+      <div>
+        {companies.map((company) => (
+          <div
+            key={company?._id}
+            className="flex flex-col md:flex-row gap-4 rounded-md shadow-md bg-white p-4 mb-4"
+          >
+            <div className="flex justify-center items-center">
+              <Image
+                src={company.logo || LogoDefault}
+                alt={`Logo of ${company.name}`}
+                width={50}
+                height={50}
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-md font-bold">{company.name}</span>
+              <div className="text-sm text-gray-500">
+                <strong>RUC:</strong> {company.ruc}
+              </div>
+              <div>
+                <strong>Direccion:</strong> {company.address}
+              </div>
+              <div>
+                <strong>Telefono:</strong> {company.phone}
+              </div>
+              <div>
+                <strong>Email:</strong> {company.email}
+              </div>
+            </div>
+            <div className="flex justify-center gap-2 items-center">
+              <button
+                onClick={() => handleEditCompany(company._id)}
+                className="bg-teal-500 p-2 rounded-md text-white font-bold"
+              >
+                <MdEdit />
+              </button>
+              <button
+                className="bg-gray-500 p-2 rounded-md text-white font-bold"
+                onClick={() => {
+                  navigator.clipboard.writeText(company.apiKey);
+                  Swal.fire(
+                    "Aviso",
+                    "La API KEY ha sido copiada al portapapeles",
+                    "success"
+                  );
+                }}
+              >
+                <MdOutlineContentCopy />
+              </button>
+              <button
+                onClick={() => handleDeleteCompany(company._id)}
+                className="bg-red-500 p-2 rounded-md text-white font-bold"
+              >
+                <MdDelete />
+              </button>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
