@@ -1,6 +1,12 @@
-import React, { createContext, useMemo, useState } from "react";
+import React, { createContext, useMemo, useState, ReactNode } from "react";
 
-export const AppContext = createContext({
+export const AppContext = createContext<{
+  expanded: boolean;
+  setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+  openDrawer: boolean;
+  setOpenDrawer: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleDrawer: () => void;
+}>({
   expanded: false,
   setExpanded: () => {},
   openDrawer: false,
@@ -8,7 +14,7 @@ export const AppContext = createContext({
   toggleDrawer: () => {},
 });
 
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [expanded, setExpanded] = useState(true);
   const [openDrawer, setOpenDrawer] = useState(false);
 

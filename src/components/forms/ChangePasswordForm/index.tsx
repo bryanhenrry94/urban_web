@@ -5,7 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { schema, FormData } from "./validate";
 import Swal from "sweetalert2";
 import { changePassword } from "@/services/userService";
-import { AxiosError } from "axios";
 
 interface ChangePasswordProps {
   id: string;
@@ -47,15 +46,10 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
           confirmButtonColor: "#22C55E",
           confirmButtonText: "Ok",
         });
-    } catch (error: AxiosError | any) {
-      const errorMessage =
-        error.response && error.response.data && error.response.data.message
-          ? error.response.data.message
-          : (error as any).message;
-
+    } catch {
       Swal.fire({
         title: "Aviso",
-        text: `Error: ${errorMessage}`,
+        text: "Error: No se pudo actualizar la contraseña",
         icon: "error",
         confirmButtonColor: "#22C55E",
         confirmButtonText: "Ok",

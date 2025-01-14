@@ -3,7 +3,6 @@
 import { useEffect, ReactNode } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import MainLayout from "@/components/layouts/MainLayout";
 import PrivateLayout from "@/components/layouts/PrivateLayout";
 
 export default function LayoutAdmin({ children }: { children: ReactNode }) {

@@ -42,10 +42,10 @@ const options = {
     signIn: "/signin", // Página personalizada de inicio de sesión
   },
   session: {
-    strategy: "jwt", // Usamos JWT para manejar la sesión
+    strategy: "jwt" as const, // Usamos JWT para manejar la sesión
   },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
         // Solo añade propiedades al token si hay un usuario autenticado
         token.id = user.id;
@@ -57,7 +57,7 @@ const options = {
 
       return token;
     },
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
       // Si existe el token, añade sus valores a la sesión
       if (token) {
         session.user = {

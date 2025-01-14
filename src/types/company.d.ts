@@ -1,8 +1,8 @@
 export interface Company {
   ruc: string;
   name: string;
-  address?: string;
-  phone?: string;
+  address?: string | null;
+  phone?: string | null;
   email: string;
 }
 

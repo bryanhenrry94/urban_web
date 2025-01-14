@@ -1,13 +1,14 @@
 import React from "react";
 import { useSession } from "next-auth/react";
 import { FiMoreVertical } from "react-icons/fi";
+import Image from "next/image";
 
 const UserCard: React.FC = () => {
   const { data: session } = useSession();
 
   return (
     <div className="border-t flex p-2 gap-2">
-      <img
+      <Image
         src="https://ui-avatars.com/api/?background=55c271&color=fff&bold=true"
         alt=""
         className="w-8 h-8 rounded-md"

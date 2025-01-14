@@ -3,11 +3,11 @@ export interface Person {
   idType: string;
   idNumber: string;
   email: string;
-  phone?: string;
-  address?: string;
+  phone?: string | null;
+  address?: string | null;
   roles: string[];
-  companyName?: string;
-  logo?: string;
+  companyName?: string | null;
+  logo?: string | null;
   companyId: string;
 }
 
