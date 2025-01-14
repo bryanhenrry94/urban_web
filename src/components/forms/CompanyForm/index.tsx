@@ -117,8 +117,8 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap gap-4 p-4 border-b-2">
-        <div className="flex flex-col w-full lg:w-1/4">
+      <div className="flex flex-wrap gap-4">
+        <div className="flex flex-col w-full lg:w-1/4 mb-4">
           <label htmlFor="ruc" className="font-normal text-md mb-1">
             RUC:
           </label>
@@ -126,15 +126,15 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             id="ruc"
             type="text"
             {...register("ruc")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            className="p-2 rounded-md border border-gray-300 font-normal text-md bg-white"
             placeholder="RUC"
             disabled={modeEdit ? true : false}
           />
-          <p className="text-red-500 font-normal text-sm mb-2">
+          <p className="text-red-500 font-normal text-sm mt-1">
             {errors.ruc?.message}
           </p>
         </div>
-        <div className="flex flex-col w-full lg:w-1/2">
+        <div className="flex flex-col w-full lg:w-1/2 mb-4">
           <label htmlFor="name" className="font-normal text-md mb-1">
             Nombre:
           </label>
@@ -142,14 +142,14 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             id="name"
             type="text"
             {...register("name")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            className="p-2 rounded-md border border-gray-300 font-normal text-md bg-white"
             placeholder="Nombre"
           />
-          <p className="text-red-500 font-normal text-sm mb-2">
+          <p className="text-red-500 font-normal text-sm mt-1">
             {errors.name?.message}
           </p>
         </div>
-        <div className="flex flex-col w-full lg:w-1/2">
+        <div className="flex flex-col w-full lg:w-1/2 mb-4">
           <label htmlFor="address" className="font-normal text-md mb-1">
             Dirección:
           </label>
@@ -157,11 +157,11 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             id="address"
             type="text"
             {...register("address")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            className="p-2 rounded-md border border-gray-300 font-normal text-md bg-white"
             placeholder="Dirección"
           />
         </div>
-        <div className="flex flex-col w-full lg:w-1/4">
+        <div className="flex flex-col w-full lg:w-1/4 mb-4">
           <label htmlFor="phone" className="font-normal text-md mb-1">
             Teléfono:
           </label>
@@ -169,11 +169,11 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
             id="phone"
             type="text"
             {...register("phone")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Telefono"
+            className="p-2 rounded-md border border-gray-300 font-normal text-md bg-white"
+            placeholder="Teléfono"
           />
         </div>
-        <div className="flex flex-col w-full lg:w-1/2">
+        <div className="flex flex-col w-full lg:w-1/2 mb-4">
           <label htmlFor="email" className="font-normal text-md mb-1">
             Correo:
           </label>
@@ -186,17 +186,17 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
                 message: "Correo no válido",
               },
             })}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            className="p-2 rounded-md border border-gray-300 font-normal text-md bg-white"
             placeholder="Correo"
           />
-          <p className="text-red-500 font-normal text-sm mb-2">
+          <p className="text-red-500 font-normal text-sm mt-1">
             {errors.email?.message}
           </p>
         </div>
         <div className="flex w-full">
           <button
             type="submit"
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-200"
           >
             {modeEdit ? "Actualizar" : "Guardar"}
           </button>

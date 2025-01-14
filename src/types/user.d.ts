@@ -5,6 +5,10 @@ export interface User {
   status: string;
 }
 
+export interface UserProfile {
+  name: string;
+}
+
 export interface APIUser {
   _id: string;
   email: string;

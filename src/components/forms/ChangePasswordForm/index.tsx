@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { changePassword } from "@/services/userService";
 
 interface ChangePasswordProps {
-  id: string;
+  id?: string;
 }
 
 const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
@@ -23,6 +23,17 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
 
   const onSubmit = async (data: any) => {
     try {
+      if (!id) {
+        Swal.fire({
+          title: "Aviso",
+          text: "Error: No se pudo actualizar la contraseña",
+          icon: "error",
+          confirmButtonColor: "#22C55E",
+          confirmButtonText: "Ok",
+        });
+        return;
+      }
+
       const response = await changePassword(id, {
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
@@ -62,13 +73,10 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
   };
 
   return (
-    <div className="w-full max-w-xs">
+    <div className="w-full max-w-lg">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="password"
-          >
+          <label className="font-normal text-md mb-1" htmlFor="password">
             Contraseña Actual
           </label>
           <input
@@ -76,17 +84,14 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
             type="password"
             placeholder="******************"
             {...register("oldPassword")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            className="p-2 rounded-md border-2 font-normal text-md bg-transparent w-full"
           />
           <p className="text-red-500 font-normal text-sm mb-2">
             {errors.oldPassword?.message}
           </p>
         </div>
         <div className="mb-4">
-          <label
-            className="block text-gray-700 text-sm font-bold mb-2"
-            htmlFor="new-password"
-          >
+          <label className="font-normal text-md mb-1" htmlFor="new-password">
             Nueva Contraseña
           </label>
           <input
@@ -94,15 +99,21 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
             type="password"
             placeholder="******************"
             {...register("newPassword")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            className="p-2 rounded-md border-2 font-normal text-md bg-transparent w-full"
           />
           <p className="text-red-500 font-normal text-sm mb-2">
             {errors.newPassword?.message}
           </p>
+          <p className="text-gray-600 text-sm">
+            La contraseña debe tener al menos 8 caracteres, incluir al menos una
+            letra mayúscula, una letra minúscula, un número, un carácter
+            especial (!@#$%^&*, etc.), y no debe contener caracteres repetidos
+            consecutivamente.
+          </p>
         </div>
         <div className="mb-6">
           <label
-            className="block text-gray-700 text-sm font-bold mb-2"
+            className="font-normal text-md mb-1"
             htmlFor="confirm-password"
           >
             Confirmar Contraseña
@@ -114,7 +125,7 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
             {...register("confirmPassword", {
               validate: validatePasswordMatch,
             })}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
+            className="p-2 rounded-md border-2 font-normal text-md bg-transparent w-full"
           />
           <p className="text-red-500 font-normal text-sm mb-2">
             {errors.confirmPassword?.message}
@@ -122,7 +133,7 @@ const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
         </div>
         <div className="flex items-center justify-between mt-4">
           <button
-            className="bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            className="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition duration-200"
             type="submit"
           >
             Guardar

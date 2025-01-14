@@ -39,6 +39,12 @@ const items = [
     route: "/secure/settings",
     icon: <LuSettings2 />,
   },
+  {
+    _id: "7",
+    name: "Empresas",
+    route: "/secure/companies",
+    icon: <LuSettings2 />,
+  },
 ];
 
 const MenuList = ({ handleLinkClick }) => {

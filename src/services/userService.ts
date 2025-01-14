@@ -1,5 +1,5 @@
 import apiClient from "@/services/apiClient";
-import { User } from "@/types/user";
+import { User, UserProfile } from "@/types/user";
 
 export const fetchUsers = async () => {
   const response = await apiClient.get("/users");
@@ -36,5 +36,10 @@ export const changePassword = async (id: string, data: any) => {
     oldPassword: data.oldPassword,
     newPassword: data.newPassword,
   });
+  return response.data;
+};
+
+export const updateProfile = async (id: string, data: UserProfile) => {
+  const response = await apiClient.put(`/users/${id}`, data);
   return response.data;
 };
