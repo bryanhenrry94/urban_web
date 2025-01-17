@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import BestPlaceImage from "@/assets/images/undraw_best-place_dhzp.svg";
@@ -6,10 +7,14 @@ import { FaHome } from "react-icons/fa";
 import LoginForm from "@/components/forms/LoginForm";
 import AppLogo from "@/components/ui/AppLogo";
 
+import SignupForm from "@/components/forms/SignupForm";
+
 const SigninPage = () => {
+  const [activeTab, setActiveTab] = useState("signin");
+
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
-      <div className="hidden lg:flex lg:w-full h-full bg-teal-500 ">
+    <div className="flex flex-col lg:flex-row h-screen bg-gray-100">
+      <div className="hidden lg:flex lg:w-1/2 h-full bg-teal-500">
         <div className="flex flex-col justify-center items-center w-full">
           <div className="flex flex-col justify-center items-center w-full max-w-md gap-2">
             <div className="p-2 text-center w-full text-white font-bold">
@@ -42,28 +47,64 @@ const SigninPage = () => {
           </div>
         </div>
       </div>
-      <div className="flex h-full bg-white w-full justify-center items-center p-4 lg:p-8 shadow-md lg:shadow-none">
-        <div className="p-6 w-full max-w-md">
-          <AppLogo />
-          <div className="flex flex-col space-y-4">
-            <h1 className="text-2xl font-semibold py-4 text-gray-700 text-center">
-              Inicio de Sesión
-            </h1>
-          </div>
-          <span className="text-sm font-medium text-gray-500">
-            Gestiona tu urbanización de manera eficiente y profesional
-          </span>
-          <div className="pt-4">
-            <LoginForm />
-          </div>
-          <div className="flex justify-center p-2">
-            <Link
-              href="/"
-              className="text-sm font-bold text-teal-500 hover:underline mt-4"
+      <div className="p-6 w-full h-full lg:w-1/2 flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center w-full max-w-lg p-4 bg-white rounded-lg shadow-md gap-4">
+          <div className="flex justify-start gap-2 w-full">
+            <button
+              className={`px-4 py-2 rounded-md ${
+                activeTab === "signin"
+                  ? "bg-teal-500 text-white"
+                  : "bg-gray-200"
+              }`}
+              onClick={() => setActiveTab("signin")}
             >
-              Olvidaste tu Contraseña
-            </Link>
+              Iniciar Sesión
+            </button>
+            <button
+              className={`px-4 py-2 rounded-md ${
+                activeTab === "signup"
+                  ? "bg-teal-500 text-white"
+                  : "bg-gray-200"
+              }`}
+              onClick={() => setActiveTab("signup")}
+            >
+              Registrarse
+            </button>
           </div>
+          <hr className="w-full" />
+          {activeTab === "signin" ? (
+            <div className="flex justify-center items-center w-full">
+              <div className="flex flex-col w-full p-4 rounded-lg gap-2">
+                <AppLogo />
+                <h1 className="text-2xl font-semibold text-center text-gray-700">
+                  Inicio de Sesión
+                </h1>
+                <span className="text-sm font-medium text-gray-500">
+                  Gestiona tu urbanización de manera eficiente y profesional
+                </span>
+                <LoginForm />
+                <Link
+                  href="/"
+                  className="text-sm font-bold text-teal-600 hover:underline text-center"
+                >
+                  Olvidaste tu Contraseña
+                </Link>
+              </div>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center w-full">
+              <div className="flex flex-col w-full p-4 rounded-lg gap-2">
+                <AppLogo />
+                <span className="text-sm font-medium text-gray-500">
+                  Crea una cuenta para comenzar a administrar tu urbanización
+                </span>
+                <h1 className="text-2xl font-semibold text-gray-700 text-center">
+                  Crear Cuenta
+                </h1>
+                <SignupForm />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
