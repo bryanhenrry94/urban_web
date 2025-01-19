@@ -1,40 +1,40 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { MdEmail } from "react-icons/md";
 import { MdContactPhone } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { MdAdd } from "react-icons/md";
 import { FaFileImport } from "react-icons/fa";
-import LogoDefault from "@/assets/images/logo-default.png";
+import { LuRefreshCw } from "react-icons/lu";
+
 import Swal from "sweetalert2";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { APIPerson } from "@/types/person";
-import { fetchPeople, deletePerson } from "@/services/personService";
+import { usePersonApi } from "@/hooks/usePersonApi";
 
 const PeoplePage: React.FC = () => {
+  const { fetchPersons, deletePerson, persons, loading, error } =
+    usePersonApi();
+
   const router = useRouter();
-  const [people, setPeople] = useState<APIPerson[]>([]);
 
   useEffect(() => {
     loadData();
   }, []);
 
-  const loadData = async () => {
-    try {
-      const res = await fetchPeople();
-
-      const { data } = res;
-      setPeople(data);
-    } catch (error) {
-      Swal.fire("Error", (error as Error).message, "error");
+  useEffect(() => {
+    if (error) {
+      Swal.fire("Error", error, "error");
     }
+  }, [error]);
+
+  const loadData = async () => {
+    await fetchPersons();
   };
 
   const handleEditPerson = (companyId: string) => {
-    router.push(`/secure/people/person/${companyId}`);
+    router.push(`/secure/persons/person/${companyId}`);
   };
 
   const handleDeletePerson = async (companyId: string) => {
@@ -49,31 +49,30 @@ const PeoplePage: React.FC = () => {
     });
 
     if (result.isConfirmed) {
-      try {
-        // Realiza la solicitud de autenticación a tu API
-        await deletePerson(companyId);
-
-        loadData();
-        Swal.fire("Eliminado!", "La empresa ha sido eliminada.", "success");
-      } catch (error) {
-        Swal.fire("Error", (error as Error).message, "error");
-      }
+      await deletePerson(companyId);
+      Swal.fire("Eliminado!", "La empresa ha sido eliminada.", "success");
     }
   };
 
   return (
     <div className="p-4 rounded-md">
       <div className="flex justify-between items-center mb-4 ">
-        <Breadcrumb items={[{ href: "/secure/people", label: "Personas" }]} />
+        <Breadcrumb items={[{ href: "/secure/persons", label: "Personas" }]} />
         <div className="flex gap-2">
           <button
-            onClick={() => router.push("/secure/people/import")}
+            onClick={() => loadData()}
+            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+          >
+            <LuRefreshCw />
+          </button>
+          <button
+            onClick={() => router.push("/secure/persons/import")}
             className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
           >
             <FaFileImport />
           </button>
           <button
-            onClick={() => router.push("/secure/people/person")}
+            onClick={() => router.push("/secure/persons/person")}
             className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
           >
             <MdAdd />
@@ -101,26 +100,17 @@ const PeoplePage: React.FC = () => {
             <thead className="font-bold">
               <tr>
                 <th className="px-4 py-2">Persona</th>
-                {/* <th className="px-4 py-2">Razon Social</th> */}
-                {/* <th className="px-4 py-2">Dirección</th> */}
                 <th className="px-4 py-2">Roles</th>
-                <th className="px-4 py-2">Empresa</th>
                 <th className="px-4 py-2">Creado</th>
                 <th className="px-4 py-2">Accion</th>
               </tr>
             </thead>
             <tbody>
-              {people.map((person) => (
+              {persons.map((person) => (
                 <tr key={person?._id}>
                   <td className="px-4 py-2">
                     <div className="flex flex-col">
                       <div className="flex gap-2 items-center">
-                        <Image
-                          src={person.logo || LogoDefault}
-                          alt={`Logo of ${person.name}`}
-                          width={50}
-                          height={50}
-                        />
                         <div>
                           <span className="text-md font-semibold">
                             {person.name}
@@ -141,8 +131,6 @@ const PeoplePage: React.FC = () => {
                       </div>
                     </div>
                   </td>
-                  {/* <td className="px-4 py-2">{person.companyName}</td>
-                <td className="px-4 py-2">{person.address}</td> */}
                   <td className="px-4 py-2">
                     <div className="flex flex-wrap gap-2">
                       {person.roles.map((role, index) => (
@@ -153,16 +141,6 @@ const PeoplePage: React.FC = () => {
                           {role}
                         </div>
                       ))}
-                    </div>
-                  </td>
-                  <td className="px-4 py-2">
-                    <div className="flex flex-col">
-                      <span className="text-md font-semibold">
-                        {person?.companyId?.name}
-                      </span>
-                      <div className="text-sm text-gray-500">
-                        <strong>RUC:</strong> {person?.companyId?.ruc}
-                      </div>
                     </div>
                   </td>
                   <td className="px-4 py-2">{person.createdAt}</td>
@@ -187,23 +165,22 @@ const PeoplePage: React.FC = () => {
             </tbody>
           </table>
           <div className="p-2 text-center">
-            Mostrando {people.length} empresas
+            Mostrando {persons.length} empresas
           </div>
         </div>
       </div>
+      {loading && (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-teal-500"></div>
+        </div>
+      )}
       <div className="md:hidden">
-        {people.map((person) => (
+        {persons.map((person) => (
           <div
             key={person._id}
             className="flex flex-col border-b-2 p-2 bg-white rounded-md shadow-md mb-4"
           >
             <div className="flex gap-2 items-center">
-              <Image
-                src={person.logo || LogoDefault}
-                alt={`Logo of ${person.name}`}
-                width={50}
-                height={50}
-              />
               <div>
                 <span className="text-md font-semibold">{person.name}</span>
                 <div className="flex gap-2 items-center">

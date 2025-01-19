@@ -21,10 +21,21 @@ const options = {
 
           const res = await signin(credentials);
 
-          const { user } = res.data;
+          const { user, token } = res.data;
 
-          if (user) {
-            return user; // Retorna el usuario autenticado
+          const userData = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+            tenantId: user.tenantId,
+            companies: user.companies,
+            companySelected: user.companySelected,
+            token: token,
+          };
+
+          if (userData) {
+            return userData; // Retorna el usuario autenticado
           } else {
             throw new Error("Credenciales inválidas");
           }
@@ -52,7 +63,10 @@ const options = {
         token.name = user.name;
         token.email = user.email;
         token.role = user.role;
-        token.companyId = user.companyId;
+        token.tenantId = user.tenantId;
+        token.companies = user.companies;
+        token.companySelected = user.companySelected;
+        token.accessToken = user.token;
       }
 
       return token;
@@ -65,8 +79,12 @@ const options = {
           name: token.name,
           email: token.email,
           role: token.role,
-          companyId: token.companyId,
+          tenantId: token.tenantId,
+          companies: token.companies,
+          companySelected: token.companySelected,
         };
+
+        session.accessToken = token.accessToken;
       }
 
       return session;

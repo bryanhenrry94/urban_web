@@ -8,7 +8,6 @@ import { Session } from "next-auth";
 import ChangePasswordForm from "@/components/forms/ChangePasswordForm";
 import ProfileForm from "@/components/forms/ProfileForm";
 import NotificationsForm from "@/components/forms/NotificationsForm";
-import CompanyForm from "@/components/forms/CompanyForm";
 
 type AccordionItemProps = {
   title: string;
@@ -62,8 +61,6 @@ interface CustomSession extends Session {
 const SettingsPage = () => {
   const { data: session } = useSession() as { data: CustomSession | null };
 
-  console.log(session);
-
   return (
     <div className="bg-white p-4 rounded-md">
       <div className="mb-4">
@@ -89,9 +86,6 @@ const SettingsPage = () => {
       <div className="w-full mt-10 bg-white shadow-md rounded-lg">
         <AccordionItem title="Perfil">
           <ProfileForm id={session?.user?.id ?? ""} />
-        </AccordionItem>
-        <AccordionItem title="Empresa">
-          <CompanyForm id={session?.user?.companyId ?? ""} />
         </AccordionItem>
         <AccordionItem title="Notificaciones">
           <NotificationsForm />

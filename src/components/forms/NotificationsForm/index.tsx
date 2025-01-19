@@ -7,11 +7,7 @@ const NotificationsForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({
-      emailNotifications,
-      smsNotifications,
-      pushNotifications,
-    });
+    
     alert("Your notification preferences have been saved!");
   };
 

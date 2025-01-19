@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { MdOutlineContentCopy } from "react-icons/md";
@@ -10,12 +10,11 @@ import { FaFileImport } from "react-icons/fa";
 import LogoDefault from "@/assets/images/logo-default.png";
 import Swal from "sweetalert2";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { fetchCompanies, deleteCompany } from "@/services/companyService";
-import { APICompany } from "@/types/company";
+import { useCompanyApi } from "@/hooks/useCompanyApi";
 
 const CompaniesPage: React.FC = () => {
   const router = useRouter();
-  const [companies, setCompanies] = useState<APICompany[]>([]);
+  const { companies, fetchCompanies, deleteCompany } = useCompanyApi();
 
   useEffect(() => {
     loadData();
@@ -23,9 +22,7 @@ const CompaniesPage: React.FC = () => {
 
   const loadData = async () => {
     try {
-      const res = await fetchCompanies();
-      const { data } = res;
-      setCompanies(data);
+      await fetchCompanies();
     } catch (error) {
       Swal.fire("Error", (error as Error).message, "error");
     }
@@ -123,7 +120,7 @@ const CompaniesPage: React.FC = () => {
                     <div className="flex flex-col">
                       <span className="text-md font-bold">{company.name}</span>
                       <div className="text-sm text-gray-500">
-                        <strong>RUC:</strong> {company.ruc}
+                        <strong>Identifacion:</strong> {company.identification}
                       </div>
                     </div>
                   </td>
@@ -179,7 +176,7 @@ const CompaniesPage: React.FC = () => {
           </div>
         </div>
       </div>
-      <div>
+      <div className="md:hidden">
         {companies.map((company) => (
           <div
             key={company?._id}
@@ -196,7 +193,7 @@ const CompaniesPage: React.FC = () => {
             <div className="flex flex-col">
               <span className="text-md font-bold">{company.name}</span>
               <div className="text-sm text-gray-500">
-                <strong>RUC:</strong> {company.ruc}
+                <strong>Identificacion:</strong> {company.identification}
               </div>
               <div>
                 <strong>Direccion:</strong> {company.address}

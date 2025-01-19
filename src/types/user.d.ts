@@ -1,4 +1,9 @@
+import { UrbanizationAPI } from "./urbanization";
+import { ResidentAPI } from "./resident";
+
 export interface User {
+  urbanizationId?: yup.Maybe<string | undefined>;
+  residentId?: yup.Maybe<string | undefined>;
   email: string;
   name: string;
   role: string;
@@ -11,20 +16,13 @@ export interface UserProfile {
 
 export interface APIUser {
   _id: string;
-  email: string;
   name: string;
+  email: string;
   role: string;
   status: string;
-  companyId: {
-    _id: string;
-    name: string;
-    ruc: string;
-    address?: string;
-    phone?: string;
-    email?: string;
-    logo?: string;
-    apiKey: string;
-    createdAt: string;
-  };
+  urbanizationId: UrbanizationAPI;
+  residentId: ResidentAPI;
+  tenantId: string;
   createdAt: string;
+  updatedAt: string;
 }

@@ -4,13 +4,15 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema, FormData } from "./validate";
 import Swal from "sweetalert2";
-import { changePassword } from "@/services/userService";
+import { useUserApi } from "@/hooks/useUserApi";
 
 interface ChangePasswordProps {
   id?: string;
 }
 
 const ChangePasswordForm: FC<ChangePasswordProps> = ({ id }) => {
+  const { changePassword } = useUserApi();
+
   const {
     register,
     handleSubmit,

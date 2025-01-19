@@ -7,9 +7,7 @@ import PrivateLayout from "@/components/layouts/PrivateLayout";
 
 export default function LayoutAdmin({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const { status, data: session } = useSession();
-
-  console.log("LayoutAdmin", status, session);
+  const { status } = useSession();
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -26,5 +24,7 @@ export default function LayoutAdmin({ children }: { children: ReactNode }) {
     );
   }
 
-  return status === "authenticated" && <PrivateLayout>{children}</PrivateLayout>;
+  return (
+    status === "authenticated" && <PrivateLayout>{children}</PrivateLayout>
+  );
 }

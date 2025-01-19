@@ -5,26 +5,24 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import {
-  fetchCompany,
-  updateCompany,
-  saveCompany,
-} from "@/services/companyService";
 import { Company } from "@/types";
+import { useCompanyApi } from "@/hooks/useCompanyApi";
 
 const schema = yup
   .object({
-    ruc: yup.string().required("El RUC es requerido"),
-    name: yup.string().required("El nombre es requerido"),
+    identification: yup.string().required("Identificación es requerido"),
+    name: yup.string().required("Nombre es requerido"),
     address: yup.string().notRequired(),
     phone: yup.string().notRequired(),
-    email: yup.string().email().required("El correo es requerido"),
+    email: yup.string().email().required("Correo es requerido"),
   })
   .required();
 
 type FormData = yup.InferType<typeof schema>;
 
 const CompanyForm: FC<{ id?: string }> = ({ id }) => {
+  const { fetchCompany, updateCompany, saveCompany, error } = useCompanyApi();
+
   const router = useRouter();
   const [modeEdit, setModeEdit] = useState(false);
 
@@ -37,23 +35,29 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
     resolver: yupResolver(schema),
   });
 
+  useEffect(() => {
+    if (error) {
+      Swal.fire({ title: "Aviso", text: error, icon: "error" });
+    }
+  }, [error]);
+
   const getCompany = useCallback(async () => {
     try {
       if (!id) return;
 
-      const res = await fetchCompany(id);
-
-      const { data } = res;
+      const currentCompany = await fetchCompany(id);
 
       setModeEdit(true);
 
-      setValue("ruc", data.ruc);
-      setValue("name", data.name);
-      setValue("address", data.address);
-      setValue("phone", data.phone);
-      setValue("email", data.email);
-    } catch (error) {
-      console.error("Error fetching company:", error);
+      if (currentCompany) {
+        setValue("identification", currentCompany.identification);
+        setValue("name", currentCompany.name);
+        setValue("address", currentCompany.address);
+        setValue("phone", currentCompany.phone);
+        setValue("email", currentCompany.email);
+      }
+    } catch (error: Error | any) {
+      Swal.fire({ title: "Aviso", text: error.message, icon: "error" });
     }
   }, [id, setValue]);
 
@@ -67,42 +71,20 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
     try {
       if (modeEdit) {
         if (!id) return;
-
-        const response = await updateCompany(id, data);
-
-        if (response && response.data) {
-          Swal.fire({
-            title: "Aviso",
-            text: "Registro actualizado correctamente",
-            icon: "success",
-            confirmButtonColor: "#22C55E",
-            confirmButtonText: "Ok",
-          });
-        } else {
-          Swal.fire({
-            title: "Aviso",
-            text: response?.error || "Error al guardar la empresa",
-            icon: "error",
-            confirmButtonColor: "#22C55E",
-            confirmButtonText: "Ok",
-          });
-        }
+        await updateCompany(id, data);
       } else {
         // Realiza la solicitud de autenticación a tu API
-        const response = await saveCompany(data);
-
-        if (response && response.data) {
-          router.push("/secure/companies");
-        } else {
-          Swal.fire({
-            title: "Aviso",
-            text: response?.error || "Error al guardar la empresa",
-            icon: "error",
-            confirmButtonColor: "#22C55E",
-            confirmButtonText: "Ok",
-          });
-        }
+        await saveCompany(data);
       }
+
+      Swal.fire({
+        title: "Aviso",
+        text: `Empresa ${modeEdit ? "actualizada" : "guardada"} con éxito`,
+        icon: "success",
+        confirmButtonColor: "#22C55E",
+        confirmButtonText: "Ok",
+      });
+      router.push("/secure/companies");
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -119,19 +101,19 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap gap-2">
         <div className="flex flex-col w-full lg:w-1/4">
-          <label htmlFor="ruc" className="font-normal text-md mb-1">
-            RUC:
+          <label htmlFor="identification" className="font-normal text-md mb-1">
+            Identificación:
           </label>
           <input
-            id="ruc"
+            id="identification"
             type="text"
-            {...register("ruc")}
+            {...register("identification")}
             className="p-2 rounded-md border border-gray-300 font-normal text-md bg-white"
-            placeholder="RUC"
+            placeholder="identification"
             disabled={modeEdit ? true : false}
           />
           <p className="text-red-500 font-normal text-sm mt-1">
-            {errors.ruc?.message}
+            {errors.identification?.message}
           </p>
         </div>
         <div className="flex flex-col w-full lg:w-1/2">

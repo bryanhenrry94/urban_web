@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { UserProfile } from "@/types";
-import { updateProfile, fetchUser } from "@/services/userService";
+import { useUserApi } from "@/hooks/useUserApi";
 
 const schema = yup
   .object({
@@ -16,6 +16,7 @@ const schema = yup
 type FormData = yup.InferType<typeof schema>;
 
 const ProfileForm: FC<{ id: string }> = ({ id }) => {
+  const { updateProfile, fetchUser } = useUserApi();
   const {
     register,
     handleSubmit,
@@ -28,10 +29,13 @@ const ProfileForm: FC<{ id: string }> = ({ id }) => {
   const loadUser = useCallback(async () => {
     try {
       if (!id) return;
-      const res = await fetchUser(id);
-      const { data } = res;
+      const data = await fetchUser(id);
 
-      setValue("name", data.name);
+      console.log("user Profile: ", data)
+
+      if (data) {
+        setValue("name", data.name);
+      }
     } catch (error) {
       console.error("Error fetching company:", error);
     }

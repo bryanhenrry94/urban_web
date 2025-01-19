@@ -5,28 +5,38 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { APICompany, User } from "@/types";
-import { saveUser, updateUser, fetchUser } from "@/services/userService";
-import { fetchCompanies } from "@/services/companyService";
+
+import { useUserApi } from "@/hooks/useUserApi";
+import { useUrbanizationApi } from "@/hooks/useUrbanizationApi";
+import { useResidentApi } from "@/hooks/useResidentApi";
+import { User } from "@/types";
 
 const schema = yup
   .object({
-    email: yup.string().required("El email es requerido"),
     name: yup.string().required("El nombre es requerido"),
-    password: yup.string().required("La contraseña es requerida"),
+    email: yup.string().required("El email es requerido"),
     role: yup.string().required("El rol es requerido"),
     status: yup.string().required("El estado es requerido"),
-    companyId: yup.string().required("La empresa es requerida"),
+    urbanizationId: yup
+      .string()
+      .transform((value) => (value === "" ? undefined : value))
+      .notRequired(),
+    residentId: yup
+      .string()
+      .transform((value) => (value === "" ? undefined : value))
+      .notRequired(),
   })
   .required();
 
 type FormData = yup.InferType<typeof schema>;
 
 const UserForm: FC<{ id?: string }> = ({ id }) => {
+  const { saveUser, updateUser, fetchUser } = useUserApi();
+  const { urbanizations, fetchUrbanizations } = useUrbanizationApi();
+  const { residents, fetchResidents } = useResidentApi();
+
   const router = useRouter();
   const [modeEdit, setModeEdit] = useState(false);
-
-  const [companies, setCompanies] = useState<APICompany[]>([]);
 
   const {
     register,
@@ -40,35 +50,44 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
   const loadUser = useCallback(async () => {
     try {
       if (!id) return;
-      const res = await fetchUser(id);
-      const { data } = res;
+      const currentUser = await fetchUser(id);
 
       setModeEdit(true);
 
-      setValue("email", data.email);
-      setValue("name", data.name);
-      setValue("role", data.role);
-      setValue("status", data.status);
-      setValue("companyId", data.companyId);
+      if (currentUser) {
+        setValue("name", currentUser.name);
+        setValue("email", currentUser.email);
+        setValue("role", currentUser.role);
+        setValue("status", currentUser.status);
+        setValue("urbanizationId", currentUser?.urbanizationId);
+        setValue("residentId", currentUser?.residentId);
+      }
     } catch (error) {
-      console.error("Error fetching company:", error);
+      console.error("Error fetching urbanization:", error);
     }
   }, [id, setValue]);
 
-  const loadCompanies = async () => {
+  const loadUrbanizations = async () => {
     try {
       // Realiza la solicitud de autenticación a tu API
-      const res = await fetchCompanies();
+      await fetchUrbanizations();
+    } catch (error) {
+      Swal.fire("Error", (error as Error).message, "error");
+    }
+  };
 
-      const { data } = res;
-      setCompanies(data);
+  const loadResidents = async () => {
+    try {
+      // Realiza la solicitud de autenticación a tu API
+      await fetchResidents();
     } catch (error) {
       Swal.fire("Error", (error as Error).message, "error");
     }
   };
 
   useEffect(() => {
-    loadCompanies();
+    loadUrbanizations();
+    loadResidents();
   }, []);
 
   useEffect(() => {
@@ -81,41 +100,20 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
     try {
       if (modeEdit) {
         if (!id) return;
-        const response = await updateUser(id, data);
-
-        if (response && response.data) {
-          Swal.fire({
-            title: "Aviso",
-            text: "Registro actualizado correctamente",
-            icon: "success",
-            confirmButtonColor: "#22C55E",
-            confirmButtonText: "Ok",
-          });
-        } else {
-          Swal.fire({
-            title: "Aviso",
-            text: response?.error || "Error al guardar el usuario",
-            icon: "error",
-            confirmButtonColor: "#22C55E",
-            confirmButtonText: "Ok",
-          });
-        }
+        await updateUser(id, data);
       } else {
         // Realiza la solicitud de autenticación a tu API
-        const response = await saveUser(data);
-
-        if (response && response.data) {
-          router.push("/secure/users");
-        } else {
-          Swal.fire({
-            title: "Aviso",
-            text: response?.error || "Error al guardar el usuario",
-            icon: "error",
-            confirmButtonColor: "#22C55E",
-            confirmButtonText: "Ok",
-          });
-        }
+        await saveUser(data);
       }
+
+      Swal.fire({
+        title: "Aviso",
+        text: "Registro actualizado correctamente",
+        icon: "success",
+        confirmButtonColor: "#22C55E",
+        confirmButtonText: "Ok",
+      });
+      router.push("/secure/users");
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -132,26 +130,6 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap gap-2 p-4 border-b-2">
         <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="companyId" className="font-normal text-md mb-1">
-            Empresa:
-          </label>
-          <select
-            id="companyId"
-            {...register("companyId")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
-          >
-            <option value="">Seleccione una empresa</option>
-            {companies.map((company) => (
-              <option key={company._id} value={company._id}>
-                {company.name}
-              </option>
-            ))}
-          </select>
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.companyId?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
           <label htmlFor="email" className="font-normal text-md mb-1">
             Correo:
           </label>
@@ -161,6 +139,7 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
             {...register("email")}
             className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
             placeholder="Correo"
+            disabled={modeEdit}
           />
           <p className="text-red-500 font-normal text-sm mb-2">
             {errors.email?.message}
@@ -176,25 +155,9 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
             {...register("name")}
             className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
             placeholder="Nombre"
-            disabled={modeEdit ? true : false}
           />
           <p className="text-red-500 font-normal text-sm mb-2">
             {errors.name?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="password" className="font-normal text-md mb-1">
-            Contraseña:
-          </label>
-          <input
-            id="password"
-            type="password"
-            {...register("password")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Contraseña"
-          />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.password?.message}
           </p>
         </div>
         <div className="flex flex-col w-full lg:w-1/2">
@@ -206,8 +169,8 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
             {...register("role")}
             className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
           >
-            <option value="User">Usuario</option>
-            <option value="Admin">Administrador</option>
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
           </select>
           <p className="text-red-500 font-normal text-sm mb-2">
             {errors.role?.message}
@@ -222,11 +185,54 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
             {...register("status")}
             className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
           >
-            <option value="Active">Activo</option>
-            <option value="Inactive">Inactivo</option>
+            <option value="active">Activo</option>
+            <option value="inactive">Inactivo</option>
           </select>
           <p className="text-red-500 font-normal text-sm mb-2">
             {errors.status?.message}
+          </p>
+        </div>
+        <hr className="w-full border-2 my-4" />
+        <div className="flex flex-col w-full lg:w-1/2">
+          <label htmlFor="urbanizationId" className="font-normal text-md mb-1">
+            Urbanización:
+          </label>
+          <select
+            id="urbanizationId"
+            {...register("urbanizationId")}
+            className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
+          >
+            <option value="">N/A</option>
+            {urbanizations &&
+              urbanizations.map((urbanization) => (
+                <option key={urbanization._id} value={urbanization._id}>
+                  {urbanization.name}
+                </option>
+              ))}
+          </select>
+          <p className="text-red-500 font-normal text-sm mb-2">
+            {errors.urbanizationId?.message}
+          </p>
+        </div>
+        <div className="flex flex-col w-full lg:w-1/2">
+          <label htmlFor="residentId" className="font-normal text-md mb-1">
+            Residente:
+          </label>
+          <select
+            id="residentId"
+            {...register("residentId")}
+            className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
+          >
+            <option value="">N/A</option>
+            {residents &&
+              residents.map((resident) => (
+                <option key={resident._id} value={resident._id}>
+                  {resident?.userId?.name}
+                </option>
+              ))}
+          </select>
+          <p className="text-red-500 font-normal text-sm mb-2">
+            {errors.residentId?.message}
           </p>
         </div>
         <div className="flex w-full">

@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
@@ -8,12 +8,13 @@ import { MdOutlineLockReset } from "react-icons/md";
 import { FaFileImport } from "react-icons/fa";
 import Swal from "sweetalert2";
 import Breadcrumb from "@/components/ui/Breadcrumb";
-import { fetchUsers, deleteUser, resetPassword } from "@/services/userService";
-import { APIUser } from "@/types/user";
+
+import { useUserApi } from "@/hooks/useUserApi";
 
 const UsersPage: React.FC = () => {
+  const { users, fetchUsers, deleteUser, resetPassword } = useUserApi();
+
   const router = useRouter();
-  const [users, setUsers] = useState<APIUser[]>([]);
 
   useEffect(() => {
     loadData();
@@ -22,11 +23,7 @@ const UsersPage: React.FC = () => {
   const loadData = async () => {
     try {
       // Realiza la solicitud de autenticación a tu API
-      const res = await fetchUsers();
-
-      const { data } = res;
-      console.log(data);
-      setUsers(data);
+      await fetchUsers();
     } catch (error) {
       Swal.fire("Error", (error as Error).message, "error");
     }
@@ -127,12 +124,13 @@ const UsersPage: React.FC = () => {
           <table className="min-w-full border-collapse">
             <thead className="font-bold">
               <tr>
-                <th className="px-4 py-2">Email</th>
                 <th className="px-4 py-2">Nombre</th>
+                <th className="px-4 py-2">Email</th>
                 <th className="px-4 py-2">Rol</th>
-                <th className="px-4 py-2">Empresa</th>
-                <th className="px-4 py-2">Creado</th>
                 <th className="px-4 py-2">Estado</th>
+                <th className="px-4 py-2">Urbanización</th>
+                <th className="px-4 py-2">Residente</th>
+                <th className="px-4 py-2">Creado</th>
                 <th className="px-4 py-2">Accion</th>
               </tr>
             </thead>
@@ -140,36 +138,30 @@ const UsersPage: React.FC = () => {
               {users.map((user) => (
                 <tr key={user?._id}>
                   <td className="px-4 py-2">
-                    <div className="flex flex-col">
-                      <span className="text-md">{user.email}</span>
-                    </div>
+                    <div className="text-sm">{user.name}</div>
                   </td>
-                  <td className="px-4 py-2">
-                    <div className="flex flex-col">{user.name}</div>
-                  </td>
+                  <td className="px-4 py-2">{user.email}</td>
                   <td className="px-4 py-2">{user.role}</td>
-                  <td className="px-4 py-2">
-                    <div className="flex flex-col">
-                      <span className="text-md font-semibold">
-                        {user?.companyId?.name}
-                      </span>
-                      <div className="text-sm text-gray-500">
-                        <strong>RUC:</strong> {user?.companyId?.ruc}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-4 py-2">{user.createdAt}</td>
                   <td className="px-4 py-2">
                     <div
                       className={`px-2 py-1 rounded-md ${
-                        user.status === "Active"
+                        user.status === "active"
                           ? "bg-teal-100 text-teal-800"
                           : "bg-red-100 text-red-800"
                       }`}
                     >
-                      {user.status === "Active" ? "Activo" : "Inactivo"}
+                      {user.status === "active" ? "Activo" : "Inactivo"}
                     </div>
                   </td>
+                  <td className="px-4 py-2">
+                    <div className="text-sm">{user?.urbanizationId?.name}</div>
+                  </td>
+                  <td className="px-4 py-2">
+                    <div className="text-sm">
+                      {user?.residentId?.userId?.name}
+                    </div>
+                  </td>
+                  <td className="px-4 py-2">{user.createdAt}</td>
                   <td className="px-4 py-2">
                     <div className="flex justify-center gap-2 items-center">
                       <button
@@ -206,17 +198,17 @@ const UsersPage: React.FC = () => {
           >
             <div className="flex justify-between items-center">
               <div className="flex flex-col">
-                <span className="text-md">{user.email}</span>
-                <span className="text-sm text-gray-500">{user.name}</span>
+                <span className="text-md font-bold">{user.name}</span>
+                <span className="text-sm font-normal">{user.email}</span>
               </div>
               <div
                 className={`px-2 py-1 rounded-md ${
-                  user.status === "Active"
+                  user.status === "active"
                     ? "bg-teal-100 text-teal-800"
                     : "bg-red-100 text-red-800"
                 }`}
               >
-                {user.status === "Active" ? "Activo" : "Inactivo"}
+                {user.status === "active" ? "Activo" : "Inactivo"}
               </div>
             </div>
             <div className="flex gap-2 mt-2">

@@ -4,6 +4,7 @@ import { LuUserCog } from "react-icons/lu";
 import { LuSettings2 } from "react-icons/lu";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { LuUsers } from "react-icons/lu";
+import { LuIdCard } from "react-icons/lu";
 import { LuBuilding } from "react-icons/lu";
 import { LuLogOut } from "react-icons/lu";
 
@@ -18,28 +19,46 @@ const items = [
     icon: <LuLayoutDashboard />,
   },
   {
-    _id: "3",
-    name: "Personas",
-    route: "/secure/people",
-    icon: <LuUserCog />,
+    _id: "9",
+    name: "Facturación Electrónica",
+    route: "/secure/companies",
+    icon: <LuSettings2 />,
+  },
+  {
+    _id: "10",
+    name: "Urbanización",
+    route: "/secure/urbanizations",
+    icon: <LuSettings2 />,
   },
   {
     _id: "4",
     name: "Propiedades",
-    route: "/secure/homes",
+    route: "/secure/properties",
     icon: <LuBuilding />,
   },
   {
-    _id: "5",
-    name: "Usuarios",
-    route: "/secure/users",
-    icon: <LuUsers />,
+    _id: "11",
+    name: "Residentes",
+    route: "/secure/residents",
+    icon: <LuIdCard />,
   },
   {
     _id: "6",
     name: "Empresas",
     route: "/secure/companies",
     icon: <LuSettings2 />,
+  },
+  {
+    _id: "3",
+    name: "Personas",
+    route: "/secure/persons",
+    icon: <LuUserCog />,
+  },
+  {
+    _id: "5",
+    name: "Usuarios",
+    route: "/secure/users",
+    icon: <LuUsers />,
   },
 ];
 
