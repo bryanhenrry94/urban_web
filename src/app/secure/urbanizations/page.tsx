@@ -5,6 +5,8 @@ import { MdEdit } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import { MdAdd } from "react-icons/md";
 import { FaFileImport } from "react-icons/fa";
+import { LuEllipsisVertical } from "react-icons/lu";
+
 import Swal from "sweetalert2";
 import Breadcrumb from "@/components/ui/Breadcrumb";
 import { useUrbanizationApi } from "@/hooks/useUrbanizationApi";
@@ -149,25 +151,45 @@ const UrbanizationsPage: React.FC = () => {
         {urbanizations.map((urbanization) => (
           <div
             key={urbanization?._id}
-            className="flex flex-col md:flex-row gap-4 rounded-md shadow-md bg-white p-4 mb-4"
+            className="flex flex-col md:flex-row gap-4 rounded-md shadow-md bg-white p-4"
           >
-            <div className="flex flex-col">
+            <div className="flex justify-between items-center">
               <span className="text-md font-bold">{urbanization.name}</span>
-              <strong>Dirección:</strong> {urbanization.address}
+              <div className="flex justify-center gap-2 items-center relative">
+                <button
+                  className="p-2 rounded-md font-bold"
+                  onClick={() => {
+                    const dropdown = document.getElementById(
+                      `dropdown-${urbanization._id}`
+                    );
+                    if (dropdown) {
+                      dropdown.classList.toggle("hidden");
+                    }
+                  }}
+                >
+                  <LuEllipsisVertical />
+                </button>
+                <div
+                  id={`dropdown-${urbanization._id}`}
+                  className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg hidden"
+                >
+                  <button
+                    onClick={() => handleEditUrbanization(urbanization._id)}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    onClick={() => handleDeleteUrbanization(urbanization._id)}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Eliminar
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="flex justify-center gap-2 items-center">
-              <button
-                onClick={() => handleEditUrbanization(urbanization._id)}
-                className="bg-teal-500 p-2 rounded-md text-white font-bold"
-              >
-                <MdEdit />
-              </button>
-              <button
-                onClick={() => handleDeleteUrbanization(urbanization._id)}
-                className="bg-red-500 p-2 rounded-md text-white font-bold"
-              >
-                <MdDelete />
-              </button>
+            <div className="flex flex-col">
+              <div className="flex flex-col">{urbanization.address}</div>
             </div>
           </div>
         ))}

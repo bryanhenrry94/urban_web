@@ -1,10 +1,13 @@
 import React from "react";
-
+import { LuTrello } from "react-icons/lu";
 import { LuUserCog } from "react-icons/lu";
+import { LuPiggyBank } from "react-icons/lu";
 import { LuSettings2 } from "react-icons/lu";
 import { LuLayoutDashboard } from "react-icons/lu";
 import { LuUsers } from "react-icons/lu";
 import { LuIdCard } from "react-icons/lu";
+import { LuCircleUser } from "react-icons/lu";
+
 import { LuBuilding } from "react-icons/lu";
 import { LuLogOut } from "react-icons/lu";
 
@@ -19,14 +22,14 @@ const items = [
     icon: <LuLayoutDashboard />,
   },
   {
-    _id: "9",
-    name: "Facturación Electrónica",
-    route: "/secure/companies",
+    _id: "2",
+    name: "Facturación",
+    route: "/secure/billing",
     icon: <LuSettings2 />,
   },
   {
-    _id: "10",
-    name: "Urbanización",
+    _id: "3",
+    name: "Urbanizaciones",
     route: "/secure/urbanizations",
     icon: <LuSettings2 />,
   },
@@ -37,25 +40,25 @@ const items = [
     icon: <LuBuilding />,
   },
   {
-    _id: "11",
-    name: "Residentes",
-    route: "/secure/residents",
+    _id: "5",
+    name: "Seguridad",
+    route: "/secure/security",
     icon: <LuIdCard />,
   },
   {
     _id: "6",
-    name: "Empresas",
-    route: "/secure/companies",
-    icon: <LuSettings2 />,
+    name: "Banco",
+    route: "/secure/bank",
+    icon: <LuPiggyBank />,
   },
   {
-    _id: "3",
-    name: "Personas",
-    route: "/secure/persons",
-    icon: <LuUserCog />,
+    _id: "7",
+    name: "Reportes",
+    route: "/secure/reports",
+    icon: <LuTrello />,
   },
   {
-    _id: "5",
+    _id: "8",
     name: "Usuarios",
     route: "/secure/users",
     icon: <LuUsers />,
@@ -83,7 +86,7 @@ const MenuList = ({ handleLinkClick }) => {
       <MenuItem
         key={7}
         item={{
-          _id: "7",
+          _id: "9",
           name: "Configuración",
           route: "/secure/settings",
           icon: <LuSettings2 />,
@@ -91,9 +94,19 @@ const MenuList = ({ handleLinkClick }) => {
         handleItemClick={handleItemClick}
       />
       <MenuItem
-        key={8}
+        key={10}
         item={{
-          _id: "8",
+          _id: "10",
+          name: "Cuenta",
+          route: "/secure/account",
+          icon: <LuCircleUser />,
+        }}
+        handleItemClick={handleItemClick}
+      />
+      <MenuItem
+        key={11}
+        item={{
+          _id: "11",
           name: "Cerrar Sesión",
           route: "/auth/signin",
           icon: <LuLogOut />,

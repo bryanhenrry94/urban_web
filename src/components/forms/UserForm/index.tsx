@@ -7,8 +7,7 @@ import * as yup from "yup";
 import { useRouter } from "next/navigation";
 
 import { useUserApi } from "@/hooks/useUserApi";
-import { useUrbanizationApi } from "@/hooks/useUrbanizationApi";
-import { useResidentApi } from "@/hooks/useResidentApi";
+import { usePropertyApi } from "@/hooks/usePropertyApi";
 import { User } from "@/types";
 
 const schema = yup
@@ -17,11 +16,7 @@ const schema = yup
     email: yup.string().required("El email es requerido"),
     role: yup.string().required("El rol es requerido"),
     status: yup.string().required("El estado es requerido"),
-    urbanizationId: yup
-      .string()
-      .transform((value) => (value === "" ? undefined : value))
-      .notRequired(),
-    residentId: yup
+    propertyId: yup
       .string()
       .transform((value) => (value === "" ? undefined : value))
       .notRequired(),
@@ -32,8 +27,7 @@ type FormData = yup.InferType<typeof schema>;
 
 const UserForm: FC<{ id?: string }> = ({ id }) => {
   const { saveUser, updateUser, fetchUser } = useUserApi();
-  const { urbanizations, fetchUrbanizations } = useUrbanizationApi();
-  const { residents, fetchResidents } = useResidentApi();
+  const { properties, fetchProperties } = usePropertyApi();
 
   const router = useRouter();
   const [modeEdit, setModeEdit] = useState(false);
@@ -59,8 +53,7 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
         setValue("email", currentUser.email);
         setValue("role", currentUser.role);
         setValue("status", currentUser.status);
-        setValue("urbanizationId", currentUser?.urbanizationId);
-        setValue("residentId", currentUser?.residentId);
+        setValue("propertyId", currentUser?.propertyId);
       }
     } catch (error) {
       console.error("Error fetching urbanization:", error);
@@ -70,16 +63,7 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
   const loadUrbanizations = async () => {
     try {
       // Realiza la solicitud de autenticación a tu API
-      await fetchUrbanizations();
-    } catch (error) {
-      Swal.fire("Error", (error as Error).message, "error");
-    }
-  };
-
-  const loadResidents = async () => {
-    try {
-      // Realiza la solicitud de autenticación a tu API
-      await fetchResidents();
+      await fetchProperties();
     } catch (error) {
       Swal.fire("Error", (error as Error).message, "error");
     }
@@ -87,7 +71,6 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
 
   useEffect(() => {
     loadUrbanizations();
-    loadResidents();
   }, []);
 
   useEffect(() => {
@@ -194,45 +177,24 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
         </div>
         <hr className="w-full border-2 my-4" />
         <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="urbanizationId" className="font-normal text-md mb-1">
-            Urbanización:
+          <label htmlFor="propertyId" className="font-normal text-md mb-1">
+            Propiedad:
           </label>
           <select
-            id="urbanizationId"
-            {...register("urbanizationId")}
+            id="propertyId"
+            {...register("propertyId")}
             className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
           >
             <option value="">N/A</option>
-            {urbanizations &&
-              urbanizations.map((urbanization) => (
-                <option key={urbanization._id} value={urbanization._id}>
-                  {urbanization.name}
+            {properties &&
+              properties.map((property) => (
+                <option key={property._id} value={property._id}>
+                  {property.urbanizationId?.name} - {property.unitNumber}
                 </option>
               ))}
           </select>
           <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.urbanizationId?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="residentId" className="font-normal text-md mb-1">
-            Residente:
-          </label>
-          <select
-            id="residentId"
-            {...register("residentId")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
-          >
-            <option value="">N/A</option>
-            {residents &&
-              residents.map((resident) => (
-                <option key={resident._id} value={resident._id}>
-                  {resident?.userId?.name}
-                </option>
-              ))}
-          </select>
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.residentId?.message}
+            {errors.propertyId?.message}
           </p>
         </div>
         <div className="flex w-full">

@@ -128,8 +128,7 @@ const UsersPage: React.FC = () => {
                 <th className="px-4 py-2">Email</th>
                 <th className="px-4 py-2">Rol</th>
                 <th className="px-4 py-2">Estado</th>
-                <th className="px-4 py-2">Urbanización</th>
-                <th className="px-4 py-2">Residente</th>
+                <th className="px-4 py-2">Propiedad</th>
                 <th className="px-4 py-2">Creado</th>
                 <th className="px-4 py-2">Accion</th>
               </tr>
@@ -154,12 +153,7 @@ const UsersPage: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-4 py-2">
-                    <div className="text-sm">{user?.urbanizationId?.name}</div>
-                  </td>
-                  <td className="px-4 py-2">
-                    <div className="text-sm">
-                      {user?.residentId?.userId?.name}
-                    </div>
+                    <div className="text-sm">{user?.propertyId?.unitNumber}</div>
                   </td>
                   <td className="px-4 py-2">{user.createdAt}</td>
                   <td className="px-4 py-2">

@@ -1,11 +1,26 @@
 import { UrbanizationAPI } from "./urbanization";
-import { ResidentAPI } from "./resident";
 
 export type Property = {
   urbanizationId: string;
   unitType: string;
   unitNumber: string;
-  residents?: { residentId: string }[] | undefined;
+  electronicInvoiceEnabled: boolean;
+  residents: {
+    name: string;
+    subname: string;
+    identification: string;
+    email: string;
+    phoneNumber?: string;
+    emergencyContact?: string;
+    notes?: string;
+  }[];
+  ownerBillingInfo?: {
+    nameOrBusinessName?: string;
+    taxId?: string;
+    billingAddress?: string;
+    email?: string;
+    phoneNumber?: string;
+  };
 };
 
 export interface PropertyAPI {
@@ -13,7 +28,24 @@ export interface PropertyAPI {
   urbanizationId: UrbanizationAPI;
   unitType: string;
   unitNumber: string;
-  residents: ResidentAPI[];
+  electronicInvoiceEnabled: boolean;
+  residents: {
+    name: string;
+    subname: string;
+    identification: string;
+    email: string;
+    phoneNumber?: string;
+    emergencyContact?: string;
+    notes?: string;
+  }[];
+  ownerBillingInfo?: {
+    nameOrBusinessName?: string;
+    taxId?: string;
+    billingAddress?: string;
+    email?: string;
+    phoneNumber?: string;
+  };
+  tenantId: string;
   createdAt: string;
   updatedAt: string;
 }
