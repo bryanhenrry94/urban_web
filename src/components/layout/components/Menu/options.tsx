@@ -31,23 +31,23 @@ export const menuItemsList: MenuItem[] = [
       },
       {
         name: "Contabilidad",
-        path: "/gestion/contabilidad",
+        path: "/management/contabilidad",
         icon: <MdManageHistory />,
         isParent: true,
         items: [
           {
             name: "Asientos",
-            path: "/gestion/contabilidad/asientos",
+            path: "/management/accounting/journal-entries",
             icon: <BsDot />,
           },
           {
             name: "Plan de Cuentas",
-            path: "/accounting/chart_of_accounts",
+            path: "/management/accounting/chart-of-accounts",
             icon: <BsDot />,
           },
           {
             name: "Centros de Costos",
-            path: "/gestion/contabilidad/centros-de-costos",
+            path: "/management/accounting/cost-centers",
             icon: <BsDot />,
           },
         ],
@@ -60,17 +60,17 @@ export const menuItemsList: MenuItem[] = [
         items: [
           {
             name: "Agregar/Editar",
-            path: "/management/resident",
+            path: "/management/residents",
             icon: <BsDot />,
           },
           {
             name: "Historial de Pagos",
-            path: "/gestion/residentes/historial-de-pagos",
+            path: "/management/residents/history",
             icon: <BsDot />,
           },
           {
             name: "Enviar Notificaciones",
-            path: "/gestion/residentes/enviar-notificaciones",
+            path: "/management/residents/notifications",
             icon: <BsDot />,
           },
         ],
@@ -82,23 +82,23 @@ export const menuItemsList: MenuItem[] = [
     items: [
       {
         name: "Accesos",
-        path: "/control-de-accesos/accesos",
+        path: "/access-control",
         icon: <GrSecure />,
         isParent: true,
         items: [
           {
             name: "Registro de Accesos",
-            path: "/control-de-accesos/accesos/registro-de-accesos",
+            path: "/access-control/access-log",
             icon: <BsDot />,
           },
           {
             name: "Control de Visitantes",
-            path: "/control-de-accesos/accesos/control-de-visitantes",
+            path: "/access-control/visitors",
             icon: <BsDot />,
           },
           {
             name: "Bitácora",
-            path: "/control-de-accesos/accesos/bitacora",
+            path: "/access-control/logs",
             icon: <BsDot />,
           },
         ],
@@ -110,23 +110,23 @@ export const menuItemsList: MenuItem[] = [
     items: [
       {
         name: "Comunicación",
-        path: "/comunicacion",
+        path: "/communication",
         icon: <FaForumbee />,
         isParent: true,
         items: [
           {
             name: "Anuncios Generales",
-            path: "/comunicacion/anuncios-generales",
+            path: "/communication/announcements",
             icon: <BsDot />,
           },
           {
             name: "Encuestas y Votaciones",
-            path: "/comunicacion/encuestas-y-votaciones",
+            path: "/communication/surveys",
             icon: <BsDot />,
           },
           {
             name: "Foro Comunitario",
-            path: "/comunicacion/foro-comunitario",
+            path: "/communication/forum",
             icon: <BsDot />,
           },
         ],
@@ -138,89 +138,89 @@ export const menuItemsList: MenuItem[] = [
     items: [
       {
         name: "Reportes",
-        path: "/reportes-y-finanzas/reportes",
+        path: "/reports-finance/reports",
         icon: <FaChartBar />,
         isParent: true,
         items: [
           {
             name: "Estado de Resultado",
-            path: "/reportes-y-finanzas/reportes/estado-de-resultado",
+            path: "/reports-finance/reports/income-statement",
             icon: <BsDot />,
           },
           {
             name: "Balance General",
-            path: "/reportes-y-finanzas/reportes/balance-general",
+            path: "/reports-finance/reports/balance-sheet",
             icon: <BsDot />,
           },
           {
             name: "Balance de Comprobación",
-            path: "/reportes-y-finanzas/reportes/balance-de-comprobacion",
+            path: "/reports-finance/reports/trial-balance",
             icon: <BsDot />,
           },
           {
             name: "Flujo de Caja",
-            path: "/reportes-y-finanzas/reportes/flujo-de-caja",
+            path: "/reports-finance/reports/cash-flow",
             icon: <BsDot />,
           },
           {
             name: "Ventas",
-            path: "/reportes-y-finanzas/reportes/ventas",
+            path: "/reports-finance/reports/sales",
             icon: <BsDot />,
           },
           {
             name: "Gastos Comunes",
-            path: "/reportes-y-finanzas/reportes/gastos-comunes",
+            path: "/reports-finance/reports/common-expenses",
             icon: <BsDot />,
           },
         ],
       },
       {
         name: "Transacciones",
-        path: "/reportes-y-finanzas/transacciones",
+        path: "/reports-finance/transactions",
         icon: <FaMoneyBillWave />,
         isParent: true,
         items: [
           {
             name: "Facturación",
-            path: "/reportes-y-finanzas/transacciones/facturacion",
+            path: "/reports-finance/transactions/invoicing",
             icon: <BsDot />,
           },
           {
             name: "Cobros",
-            path: "/reportes-y-finanzas/transacciones/cobros",
+            path: "/reports-finance/transactions/collections",
             icon: <BsDot />,
           },
           {
             name: "Pagos",
-            path: "/reportes-y-finanzas/transacciones/pagos",
+            path: "/reports-finance/transactions/payments",
             icon: <BsDot />,
           },
           {
             name: "Depósitos",
-            path: "/reportes-y-finanzas/transacciones/depositos",
+            path: "/reports-finance/transactions/deposits",
             icon: <BsDot />,
           },
         ],
       },
       {
         name: "Bancos",
-        path: "/reportes-y-finanzas/bancos",
+        path: "/reports-finance/banks",
         icon: <FaUniversity />,
         isParent: true,
         items: [
           {
             name: "Estado de Cuenta",
-            path: "/reportes-y-finanzas/bancos/estado-de-cuenta",
+            path: "/reports-finance/banks/statements",
             icon: <BsDot />,
           },
           {
             name: "Movimientos",
-            path: "/reportes-y-finanzas/bancos/movimientos",
+            path: "/reports-finance/banks/movements",
             icon: <BsDot />,
           },
           {
             name: "Conciliación Bancaria",
-            path: "/reportes-y-finanzas/bancos/conciliacion-bancaria",
+            path: "/reports-finance/banks/reconciliation",
             icon: <BsDot />,
           },
         ],
@@ -232,33 +232,33 @@ export const menuItemsList: MenuItem[] = [
     items: [
       {
         name: "Configuración",
-        path: "/configuracion",
+        path: "/settings",
         icon: <MdSettings />,
         isParent: true,
         items: [
           {
             name: "Facturación Electrónica",
-            path: "/configuracion/facturacion-electronica",
+            path: "/settings/billing",
             icon: <BsDot />,
           },
           {
             name: "Categorías",
-            path: "/configuracion/categorias",
+            path: "/settings/categories",
             icon: <BsDot />,
           },
           {
             name: "Reglas y Normativas",
-            path: "/configuracion/reglas-y-normativas",
+            path: "/settings/rules",
             icon: <BsDot />,
           },
           {
             name: "Usuarios del Sistema",
-            path: "/configuracion/usuarios-del-sistema",
+            path: "/settings/users",
             icon: <BsDot />,
           },
           {
             name: "Integraciones",
-            path: "/configuracion/integraciones",
+            path: "/settings/integrations",
             icon: <BsDot />,
           },
         ],

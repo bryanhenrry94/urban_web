@@ -31,9 +31,9 @@ const SignupPage = () => {
         sx={{ display: "flex", overflow: "hidden", borderRadius: 2 }}
       >
         <Box sx={{ p: 4, display: "flex", gap: 4 }}>
-          <Grid2 container>
+          <Grid2 container spacing={2}>
             <Grid2 size={{ xs: 12, md: 6 }}>
-              <Box sx={{ p: 4 }}>
+              <Box>
                 <Typography
                   variant="h5"
                   component="h1"
