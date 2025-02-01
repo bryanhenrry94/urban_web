@@ -1,30 +1,35 @@
 "use client";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import { FunctionComponent, PropsWithChildren } from "react";
+import { Viewport } from "next";
+import { SimplePaletteColorOptions } from "@mui/material";
+import { AppStoreProvider } from "@/store";
 import { SessionProvider } from "next-auth/react";
+import defaultTheme, { ThemeProvider } from "@/theme";
+import CurrentLayout from "@/components/layout";
+import "@/styles/globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const THEME_COLOR =
+  (defaultTheme.palette?.primary as SimplePaletteColorOptions)?.main ||
+  "#FFFFFF";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+// export const viewport: Viewport = {
+//   themeColor: THEME_COLOR,
+// };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+const RootLayout: FunctionComponent<PropsWithChildren> = ({ children }) => {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SessionProvider>{children}</SessionProvider>
+      <body>
+        <AppStoreProvider>
+          <ThemeProvider>
+            <SessionProvider>
+              <CurrentLayout>{children}</CurrentLayout>
+            </SessionProvider>
+          </ThemeProvider>
+        </AppStoreProvider>
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;

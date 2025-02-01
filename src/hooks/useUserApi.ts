@@ -8,6 +8,8 @@ export const useUserApi = () => {
   const [users, setUsers] = useState<APIUser[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [emailRecoveryPassword, setEmailRecoveryPassword] =
+    useState<string>("");
 
   const handleError = (error: unknown) => {
     if (error instanceof AxiosError) {
@@ -82,8 +84,30 @@ export const useUserApi = () => {
   };
 
   const resetPassword = async (email: string) => {
-    const response = await apiClient.post("/users/reset-password", { email });
-    return response.data;
+    try {
+      setLoading(true);
+      const response = await apiClient.post("/users/reset-password", { email });
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const validateCodeOTP = async (email: string, codeOTP: string) => {
+    try {
+      setLoading(true);
+      const response = await apiClient.post("/users/validateCodeOTP", {
+        email,
+        codeOTP,
+      });
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const changePassword = async (id: string, data: any) => {
@@ -92,6 +116,21 @@ export const useUserApi = () => {
       const response = await apiClient.put(`/users/change-password/${id}`, {
         oldPassword: data.oldPassword,
         newPassword: data.newPassword,
+      });
+      return response.data;
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const setNewPassword = async (email: string, password: string) => {
+    try {
+      setLoading(true);
+      const response = await apiClient.post(`/users/setNewPassword`, {
+        email,
+        password,
       });
       return response.data;
     } catch (error) {
@@ -117,6 +156,7 @@ export const useUserApi = () => {
     users,
     loading,
     error,
+    emailRecoveryPassword,
     fetchUsers,
     fetchUser,
     deleteUser,
@@ -125,5 +165,8 @@ export const useUserApi = () => {
     resetPassword,
     changePassword,
     updateProfile,
+    setNewPassword,
+    setEmailRecoveryPassword,
+    validateCodeOTP,
   };
 };

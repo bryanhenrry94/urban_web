@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
+import { TextField, Button, Box, Divider } from "@mui/material";
+import { FaGoogle } from "react-icons/fa";
 
 const schema = yup
   .object({
@@ -60,36 +62,54 @@ const LoginForm = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <input
-          {...register("email")}
-          type="email"
-          className="w-full rounded-lg border-gray-200 border-2 p-2 mb-2 text-gray-500"
-          placeholder="Email"
-        />
-        <p className="text-red-500 font-normal text-sm mb-2">
-          {errors.email?.message}
-        </p>
-
-        <input
-          {...register("password")}
-          type="password"
-          className="w-full rounded-lg border-gray-200 border-2 p-2 mb-2 text-gray-500"
-          placeholder="********"
-        />
-        <p className="text-red-500 font-normal text-sm mb-2">
-          {errors.password?.message}
-        </p>
-
-        <button
-          type="submit"
-          className="w-full rounded-lg bg-teal-500 p-2 text-white font-bold hover:bg-teal-600"
-        >
-          Ingresar
-        </button>
-      </form>
-    </>
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      <TextField
+        {...register("email")}
+        margin="normal"
+        required
+        fullWidth
+        id="email"
+        label="Email"
+        name="email"
+        autoComplete="email"
+        autoFocus
+        error={!!errors.email}
+        helperText={errors.email?.message}
+        size="small"
+      />
+      <TextField
+        {...register("password")}
+        margin="normal"
+        required
+        fullWidth
+        name="password"
+        label="Password"
+        type="password"
+        id="password"
+        autoComplete="current-password"
+        error={!!errors.password}
+        helperText={errors.password?.message}
+        size="small"
+      />
+      <Button
+        type="submit"
+        fullWidth
+        variant="contained"
+        sx={{ mt: 2 }}
+        size="medium"
+      >
+        Ingresar
+      </Button>
+      <Divider sx={{ width: "100%", p: 2 }}>o</Divider>
+      <Button
+        variant="outlined"
+        fullWidth
+        startIcon={<FaGoogle />}
+        size="medium"
+      >
+        Continuar con Google
+      </Button>
+    </Box>
   );
 };
 

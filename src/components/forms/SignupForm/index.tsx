@@ -5,6 +5,8 @@ import { signup } from "@/services/authService";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 import { AxiosError } from "axios";
+import { TextField, Button, Box, Typography, Divider } from "@mui/material";
+import { FaGoogle } from "react-icons/fa";
 
 interface SignupFormValues {
   name: string;
@@ -48,7 +50,6 @@ const SignupForm: React.FC = () => {
     } catch (error) {
       setIsSubmitting(false);
 
-      // Primero verificamos si el error es un AxiosError
       if (error instanceof AxiosError) {
         return Swal.fire(
           "Error",
@@ -57,84 +58,78 @@ const SignupForm: React.FC = () => {
         );
       }
 
-      // Si no es un AxiosError, entonces verificamos si es un Error genérico
       if (error instanceof Error) {
         return Swal.fire("Error", error.message, "error");
       }
 
-      // Si el error no es ni un AxiosError ni un Error genérico, mostramos un error genérico
       return Swal.fire("Error", "Error during signup", "error");
     }
   };
 
   return (
-    <form
+    <Box
+      component="form"
       onSubmit={handleSubmit(onSubmit)}
-      className="signup-form space-y-2 w-full rounded-lg"
+      sx={{ display: "flex", flexDirection: "column", gap: 2, width: "100%" }}
     >
-      {/* Información de Acceso */}
-      <div className="flex flex-col gap-1">
-        <div className="space-y-1">
-          <label className="block">
-            Nombre:
-            <input
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              {...register("name", { required: "Nombre es requerido" })}
-            />
-          </label>
-          {errors.name && (
-            <span className="text-red-500">{errors.name.message}</span>
-          )}
-        </div>
-        <div className="space-y-2">
-          <label className="block">
-            Correo Electrónico:
-            <input
-              type="email"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              {...register("email", {
-                required: "Correo Electrónico es requerido",
-                pattern: {
-                  value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                  message: "Invalid email format",
-                },
-              })}
-            />
-          </label>
-          {errors.email && (
-            <span className="text-red-500">{errors.email.message}</span>
-          )}
-        </div>
-        <div className="space-y-2">
-          <label className="block">
-            Contraseña:
-            <input
-              type="password"
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              {...register("password", {
-                required: "Contraseña es requerida",
-                minLength: {
-                  value: 8,
-                  message: "La contraseña debe tener al menos 8 caracteres",
-                },
-              })}
-            />
-          </label>
-          {errors.password && (
-            <span className="text-red-500">{errors.password.message}</span>
-          )}
-        </div>
-      </div>
-      <button
+      <Typography variant="h6">Información de Acceso</Typography>
+      <TextField
+        label="Nombre"
+        {...register("name", { required: "Nombre es requerido" })}
+        error={!!errors.name}
+        helperText={errors.name?.message}
+        fullWidth
+        size="small"
+      />
+      <TextField
+        label="Correo Electrónico"
+        type="email"
+        {...register("email", {
+          required: "Correo Electrónico es requerido",
+          pattern: {
+            value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: "Invalid email format",
+          },
+        })}
+        error={!!errors.email}
+        helperText={errors.email?.message}
+        fullWidth
+        size="small"
+      />
+      <TextField
+        label="Contraseña"
+        type="password"
+        {...register("password", {
+          required: "Contraseña es requerida",
+          minLength: {
+            value: 8,
+            message: "La contraseña debe tener al menos 8 caracteres",
+          },
+        })}
+        error={!!errors.password}
+        helperText={errors.password?.message}
+        fullWidth
+        size="small"
+      />
+      <Button
         type="submit"
-        className={`w-full bg-teal-500 text-white py-2 rounded-md hover:bg-teal-600 ${
-          isSubmitting ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        variant="contained"
+        color="primary"
         disabled={isSubmitting}
+        fullWidth
       >
         {isSubmitting ? "Registrando..." : "Registrarse"}
-      </button>
-    </form>
+      </Button>
+      <Divider sx={{ width: "100%" }}>o</Divider>
+      <Button
+        variant="outlined"
+        fullWidth
+        startIcon={<FaGoogle />}
+        size="medium"
+      >
+        Continuar con Google
+      </Button>
+    </Box>
   );
 };
 

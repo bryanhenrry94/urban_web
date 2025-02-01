@@ -1,28 +1,60 @@
 import React from "react";
 import Link from "next/link";
+import { Container, Typography, Button, Box } from "@mui/material";
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-12">
-      <h1 className="text-4xl font-bold mb-4">Bienvenido a UrbanoAcceso</h1>
-      <p className="text-lg mb-8">
+    <Container
+      maxWidth="sm"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        minHeight: "100vh",
+        py: 12,
+      }}
+    >
+      <Typography
+        variant="h2"
+        component="h1"
+        gutterBottom
+        sx={{ fontWeight: "bold", textAlign: "center" }}
+      >
+        Bienvenido a UrbanoAcceso
+      </Typography>
+      <Typography variant="body1" gutterBottom>
         ¡Comienza a gestionar urbanizaciones o condominios gratis!
-      </p>
-      <div className="flex justify-between gap-4 w-full max-w-xs">
-        <Link
+      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: 2,
+          width: "100%",
+          maxWidth: 400,
+        }}
+      >
+        <Button
+          component={Link}
           href="/auth/signin"
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 transition duration-300 w-full text-center"
+          variant="contained"
+          color="primary"
+          fullWidth
         >
           Iniciar sesión
-        </Link>
-        <Link
+        </Button>
+        <Button
+          component={Link}
           href="/auth/signup"
-          className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-700 transition duration-300 w-full text-center"
+          variant="contained"
+          color="secondary"
+          fullWidth
         >
           Registrar
-        </Link>
-      </div>
-    </div>
+        </Button>
+      </Box>
+    </Container>
   );
 };
 
