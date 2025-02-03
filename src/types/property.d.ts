@@ -45,7 +45,7 @@ export interface PropertyAPI {
     email?: string;
     phoneNumber?: string;
   };
-  tenantId: string;
+  tenant: string;
   createdAt: string;
   updatedAt: string;
 }

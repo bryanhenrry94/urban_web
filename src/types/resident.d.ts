@@ -17,7 +17,7 @@ export interface ResidentAPI {
   propertyId: PropertyAPI;
   email: string;
   phone: string;
-  tenantId: string;
+  tenant: string;
   createdAt: string;
   updatedAt: string;
 }

@@ -29,7 +29,7 @@ const options = {
             email: user.email,
             role: user.role,
             status: user.status,
-            tenantId: user.tenantId,
+            tenant: user.tenant,
             onboardingCompleted: user.onboardingCompleted,
             token: token,
           };
@@ -63,7 +63,7 @@ const options = {
         token.name = user.name;
         token.email = user.email;
         token.role = user.role;
-        token.tenantId = user.tenantId;
+        token.tenant = user.tenant;
         token.status = user.status;
         token.onboardingCompleted = user.onboardingCompleted;
         token.accessToken = user.token;
@@ -80,7 +80,7 @@ const options = {
           email: token.email,
           role: token.role,
           status: token.status,
-          tenantId: token.tenantId,
+          tenant: token.tenant,
           onboardingCompleted: token.onboardingCompleted,
         };
 

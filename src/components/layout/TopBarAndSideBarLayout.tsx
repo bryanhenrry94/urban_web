@@ -3,12 +3,10 @@ import * as React from "react";
 import Box from "@mui/material/Box";
 import MenuIcon from "@mui/icons-material/Menu";
 import CssBaseline from "@mui/material/CssBaseline";
-import Avatar from "@mui/material/Avatar"; // Import Avatar component
 import { FunctionComponent, useEffect, useState } from "react";
 import { Drawer as MuiDrawer, StackProps } from "@mui/material";
-import { ErrorBoundary } from "@/components/common";
+import { AppLoading, ErrorBoundary } from "@/components/common";
 import { useAppStore } from "@/store";
-import { LinkToPage } from "@/utils";
 import { useIsMobile } from "@/hooks";
 import { AppBar, Toolbar, Typography, styled } from "@mui/material";
 import { DRAWER_WIDTH_COLLAPSED, DRAWER_WIDTH_EXPANDED } from "./config";
@@ -180,7 +178,9 @@ const TopBarAndSideBarLayout: FunctionComponent<Props> = ({ children }) => {
               paddingRight: state.ThemeFullWidth ? "auto" : "150px",
             }}
           >
-            {children}
+            <React.Suspense fallback={<AppLoading />}>
+              {children}
+            </React.Suspense>
           </Box>
         </ErrorBoundary>
       </Box>

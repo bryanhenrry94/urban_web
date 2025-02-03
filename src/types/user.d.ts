@@ -5,7 +5,7 @@ export interface User {
   name: string;
   role: string;
   status: string;
-  propertyId?: yup.Maybe<PropertyAPI | undefined>;
+  property?: yup.Maybe<PropertyAPI | undefined>;
 }
 
 export interface UserProfile {
@@ -18,8 +18,8 @@ export interface APIUser {
   name: string;
   role: string;
   status: string;
-  propertyId?: yup.Maybe<PropertyAPI | undefined>;
-  tenantId: string;
+  property?: yup.Maybe<PropertyAPI | undefined>;
+  tenant: string;
   createdAt: string;
   updatedAt: string;
 }

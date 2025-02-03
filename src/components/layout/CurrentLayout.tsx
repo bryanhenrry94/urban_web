@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import PrivateLayout from "./PrivateLayout";
 import PublicLayout from "./PublicLayout";
 import { useRouter } from "next/navigation";
+import { AppLoading } from "../common";
 
 /**
  * Returns the current Layout component depending on different circumstances.
@@ -15,15 +16,16 @@ const CurrentLayout: FunctionComponent<PropsWithChildren> = (props) => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("CurrentLayout: ", session?.user);
-
     if (status === "loading") return;
     if (!session) {
       router.push("/auth/signin");
     }
+    // if (session && isAuthenticated) {
+    //   router.push("/dashboard");
+    // }
   }, [session, status, router]);
 
-  if (status === "loading") return <p>Loading...</p>;
+  if (status === "loading") return <AppLoading />;
 
   return isAuthenticated ? (
     <PrivateLayout {...props} />

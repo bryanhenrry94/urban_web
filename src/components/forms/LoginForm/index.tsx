@@ -6,8 +6,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useRouter } from "next/navigation";
-import { TextField, Button, Box, Divider } from "@mui/material";
-import { FaGoogle } from "react-icons/fa";
+import { TextField, Button, Box } from "@mui/material";
 
 const schema = yup
   .object({
@@ -100,15 +99,6 @@ const LoginForm = () => {
       >
         Ingresar
       </Button>
-      {/* <Divider sx={{ width: "100%", p: 2 }}>o</Divider>
-      <Button
-        variant="outlined"
-        fullWidth
-        startIcon={<FaGoogle />}
-        size="medium"
-      >
-        Continuar con Google
-      </Button> */}
     </Box>
   );
 };

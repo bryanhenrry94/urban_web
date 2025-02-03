@@ -23,6 +23,8 @@ export const useUserApi = () => {
     try {
       setLoading(true);
       const res = await apiClient.get("/users");
+      console.log("users: ", res.data.data);
+
       setUsers(res.data.data);
     } catch (error) {
       handleError(error);

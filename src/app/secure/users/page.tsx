@@ -153,7 +153,7 @@ const UsersPage: React.FC = () => {
                     </div>
                   </td>
                   <td className="px-4 py-2">
-                    <div className="text-sm">{user?.propertyId?.unitNumber}</div>
+                    <div className="text-sm">{user?.property?.unitNumber}</div>
                   </td>
                   <td className="px-4 py-2">{user.createdAt}</td>
                   <td className="px-4 py-2">

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useUserApi } from "@/hooks/useUserApi";
 import { usePropertyApi } from "@/hooks/usePropertyApi";
 import { User } from "@/types";
+import { Box, Button, Divider, MenuItem, TextField } from "@mui/material";
 
 const schema = yup
   .object({
@@ -96,7 +97,7 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
         confirmButtonColor: "#22C55E",
         confirmButtonText: "Ok",
       });
-      router.push("/secure/users");
+      router.push("/settings/users");
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -111,101 +112,100 @@ const UserForm: FC<{ id?: string }> = ({ id }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap gap-2 p-4 border-b-2">
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="email" className="font-normal text-md mb-1">
-            Correo:
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register("email")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Correo"
-            disabled={modeEdit}
-          />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.email?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="name" className="font-normal text-md mb-1">
-            Nombre:
-          </label>
-          <input
-            id="name"
-            type="text"
-            {...register("name")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Nombre"
-          />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.name?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="role" className="font-normal text-md mb-1">
-            Rol:
-          </label>
-          <select
-            id="role"
-            {...register("role")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
-          >
-            <option value="user">Usuario</option>
-            <option value="admin">Administrador</option>
-          </select>
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.role?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="status" className="font-normal text-md mb-1">
-            Estado:
-          </label>
-          <select
-            id="status"
-            {...register("status")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
-          >
-            <option value="active">Activo</option>
-            <option value="inactive">Inactivo</option>
-          </select>
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.status?.message}
-          </p>
-        </div>
-        <hr className="w-full border-2 my-4" />
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="propertyId" className="font-normal text-md mb-1">
-            Propiedad:
-          </label>
-          <select
-            id="propertyId"
-            {...register("propertyId")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent appearance-none"
-          >
-            <option value="">N/A</option>
-            {properties &&
-              properties.map((property) => (
-                <option key={property._id} value={property._id}>
-                  {property.urbanizationId?.name} - {property.unitNumber}
-                </option>
-              ))}
-          </select>
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.propertyId?.message}
-          </p>
-        </div>
-        <div className="flex w-full">
-          <button
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          flexWrap: "wrap",
+          gap: 2,
+          p: 2,
+          borderBottom: 2,
+        }}
+      >
+        <TextField
+          id="email"
+          type="email"
+          {...register("email")}
+          variant="outlined"
+          placeholder="Correo electrónico"
+          disabled={modeEdit}
+          error={!!errors.email}
+          helperText={errors.email?.message}
+          margin={"dense"}
+          size="small"
+        />
+        <TextField
+          id="name"
+          type="text"
+          {...register("name")}
+          variant="outlined"
+          placeholder="Nombre completo"
+          error={!!errors.name}
+          helperText={errors.name?.message}
+          margin={"dense"}
+          size="small"
+        />
+        <TextField
+          id="role"
+          select
+          {...register("role")}
+          variant="outlined"
+          placeholder="Selecciona un rol"
+          error={!!errors.role}
+          helperText={errors.role?.message}
+          margin={"dense"}
+          size="small"
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value="user">Usuario</MenuItem>
+          <MenuItem value="admin">Administrador</MenuItem>
+        </TextField>
+        <TextField
+          id="status"
+          select
+          {...register("status")}
+          variant="outlined"
+          error={!!errors.status}
+          helperText={errors.status?.message}
+          margin={"dense"}
+          size="small"
+        >
+          <MenuItem value="active">Activo</MenuItem>
+          <MenuItem value="inactive">Inactivo</MenuItem>
+        </TextField>
+        <Divider />
+        <TextField
+          id="propertyId"
+          select
+          {...register("propertyId")}
+          variant="outlined"
+          error={!!errors.propertyId}
+          helperText={errors.propertyId?.message}
+          margin={"dense"}
+          size="small"
+        >
+          <MenuItem value="">N/A</MenuItem>
+          {properties &&
+            properties.map((property) => (
+              <MenuItem key={property._id} value={property._id}>
+                {property.urbanizationId?.name} - {property.unitNumber}
+              </MenuItem>
+            ))}
+        </TextField>
+
+        <Box sx={{ width: "100%" }}>
+          <Button
             type="submit"
-            className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+            variant="contained"
+            color="primary"
+            sx={{ py: 2, px: 4 }}
           >
             {modeEdit ? "Actualizar" : "Guardar"}
-          </button>
-        </div>
-      </div>
+          </Button>
+        </Box>
+      </Box>
     </form>
   );
 };

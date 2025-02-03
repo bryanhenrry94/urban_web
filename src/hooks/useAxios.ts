@@ -5,13 +5,15 @@ import { useSession } from "next-auth/react";
 export const useAxios = () => {
   const { data: session } = useSession() as any;
 
+  console.log("tenant: ", session?.user?.tenant);
+
   // Crear una instancia de Axios
   const apiClient: AxiosInstance = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_URL, // URL base de la API
     timeout: 10000, // Tiempo de espera en ms
     headers: {
       "Content-Type": "application/json",
-      "x-tenant-id": session?.user?.tenantId,
+      "x-tenant-id": session?.user?.tenant,
     },
   });
 
