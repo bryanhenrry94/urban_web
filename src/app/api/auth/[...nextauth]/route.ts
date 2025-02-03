@@ -28,9 +28,9 @@ const options = {
             name: user.name,
             email: user.email,
             role: user.role,
+            status: user.status,
             tenantId: user.tenantId,
-            companies: user.companies,
-            companySelected: user.companySelected,
+            onboardingCompleted: user.onboardingCompleted,
             token: token,
           };
 
@@ -64,8 +64,8 @@ const options = {
         token.email = user.email;
         token.role = user.role;
         token.tenantId = user.tenantId;
-        token.companies = user.companies;
-        token.companySelected = user.companySelected;
+        token.status = user.status;
+        token.onboardingCompleted = user.onboardingCompleted;
         token.accessToken = user.token;
       }
 
@@ -79,9 +79,9 @@ const options = {
           name: token.name,
           email: token.email,
           role: token.role,
+          status: token.status,
           tenantId: token.tenantId,
-          companies: token.companies,
-          companySelected: token.companySelected,
+          onboardingCompleted: token.onboardingCompleted,
         };
 
         session.accessToken = token.accessToken;

@@ -100,7 +100,7 @@ const LoginForm = () => {
       >
         Ingresar
       </Button>
-      <Divider sx={{ width: "100%", p: 2 }}>o</Divider>
+      {/* <Divider sx={{ width: "100%", p: 2 }}>o</Divider>
       <Button
         variant="outlined"
         fullWidth
@@ -108,7 +108,7 @@ const LoginForm = () => {
         size="medium"
       >
         Continuar con Google
-      </Button>
+      </Button> */}
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import Link from "next/link";
+"use client";
 import Image from "next/image";
 import BestPlaceImage from "@/assets/images/undraw_best-place_dhzp.svg";
 import { FaHome } from "react-icons/fa";
@@ -6,8 +6,11 @@ import LoginForm from "@/components/forms/LoginForm";
 import AppLogo from "@/components/ui/AppLogo";
 import { Box, Typography, Button, Container, Paper } from "@mui/material";
 import Grid from "@mui/material/Grid2";
+import { useRouter } from "next/navigation";
 
 const SigninPage = () => {
+  const router = useRouter();
+
   return (
     <Grid container height="100vh" bgcolor="grey.100">
       <Grid
@@ -40,20 +43,19 @@ const SigninPage = () => {
             presupuestos, sincroniza con tus bancos y disfruta de la
             categorización automática.
           </Typography>
-          <Link href="/" passHref legacyBehavior>
-            <Button
-              color="inherit"
-              sx={{
-                textDecoration: "underline",
-                p: 2,
-                width: "100%",
-                textAlign: "center",
-                fontWeight: "bold",
-              }}
-            >
-              Aprende más sobre UrbanoAcceso
-            </Button>
-          </Link>
+          <Button
+            color="inherit"
+            sx={{
+              textDecoration: "underline",
+              p: 2,
+              width: "100%",
+              textAlign: "center",
+              fontWeight: "bold",
+            }}
+            onClick={() => router.push("/")}
+          >
+            Aprende más sobre UrbanoAcceso
+          </Button>
           <Box
             display="flex"
             alignItems="center"
@@ -104,16 +106,23 @@ const SigninPage = () => {
           </Typography>
           <Typography variant="body2" fontWeight="medium" color="textSecondary">
             Todavia no tienes una cuenta?{" "}
-            <Link href="/auth/signup" passHref legacyBehavior>
-              <Button color="primary" sx={{ textDecoration: "underline" }}>
-                Registrate
-              </Button>
-            </Link>
+            <Button
+              color="primary"
+              sx={{ textDecoration: "underline", textTransform: "none" }}
+              onClick={() => router.push("/onboarding")}
+            >
+              Registrate
+            </Button>
           </Typography>
           <LoginForm />
-          <Link color="primary" href={"/auth/forgot-password"}>
+          <Button
+            color="primary"
+            variant="text"
+            style={{ textDecoration: "underline", textTransform: "none" }}
+            onClick={() => router.push("/forgot-password")}
+          >
             Olvidaste tu Contraseña?
-          </Link>
+          </Button>
         </Container>
       </Grid>
     </Grid>

@@ -8,8 +8,6 @@ export const useUserApi = () => {
   const [users, setUsers] = useState<APIUser[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
-  const [emailRecoveryPassword, setEmailRecoveryPassword] =
-    useState<string>("");
 
   const handleError = (error: unknown) => {
     if (error instanceof AxiosError) {
@@ -87,9 +85,9 @@ export const useUserApi = () => {
     try {
       setLoading(true);
       const response = await apiClient.post("/users/reset-password", { email });
-      return response.data;
+      return response;
     } catch (error) {
-      handleError(error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -102,9 +100,9 @@ export const useUserApi = () => {
         email,
         codeOTP,
       });
-      return response.data;
+      return response;
     } catch (error) {
-      handleError(error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -132,9 +130,9 @@ export const useUserApi = () => {
         email,
         password,
       });
-      return response.data;
+      return response;
     } catch (error) {
-      handleError(error);
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -156,7 +154,6 @@ export const useUserApi = () => {
     users,
     loading,
     error,
-    emailRecoveryPassword,
     fetchUsers,
     fetchUser,
     deleteUser,
@@ -166,7 +163,6 @@ export const useUserApi = () => {
     changePassword,
     updateProfile,
     setNewPassword,
-    setEmailRecoveryPassword,
     validateCodeOTP,
   };
 };
