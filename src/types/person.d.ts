@@ -1,21 +1,32 @@
-export type Person = {
-  name: string;
+export interface IPerson {
+  name?: string;
+  surname?: string;
+  companyName?: string;
+  phone?: string;
+  address?: string;
+  roles?: string[];
+  type: string;
+  numberId: string;
   email: string;
-  identification: string;
-  phone?: yup.Maybe<string | undefined>;
-  address?: yup.Maybe<string | undefined>;
-  roles: (string | undefined)[];
-  companyName?: yup.Maybe<string | undefined>;
-};
+}
 
-export interface APIPerson {
+export interface IPersonAPI {
   _id: string;
-  name: string;
+  tenant: string;
+  name?: string;
+  surname?: string;
+  companyName?: string;
+  phone?: string;
+  address?: string;
+  roles?: string[];
+  type: string;
+  numberId: string;
   email: string;
-  identification: string;
-  phone?: yup.Maybe<string | undefined>;
-  address?: yup.Maybe<string | undefined>;
-  roles: (string | undefined)[];
-  companyName?: yup.Maybe<string | undefined>;
   createdAt: string;
+  updatedAt: string;
+}
+
+export interface PersonTableProps {
+  rows: IPersonAPI[];
+  refresh: () => void;
 }

@@ -1,25 +1,39 @@
-import { PropertyAPI } from "./property";
+import { PropertyAPI } from "./units";
 
-export interface User {
+export interface IUserForm {
+  name: string;
   email: string;
-  name: string;
-  role: string;
-  status: string;
-  property?: yup.Maybe<PropertyAPI | undefined>;
+  role: "resident" | "guard" | "admin";
+  status: "active" | "inactive";
 }
 
-export interface UserProfile {
+export interface IUserProfile {
   name: string;
 }
 
-export interface APIUser {
+export interface IUserAPI {
   _id: string;
-  email: string;
+  tenant: string;
   name: string;
+  email: string;
   role: string;
   status: string;
-  property?: yup.Maybe<PropertyAPI | undefined>;
-  tenant: string;
+  subscription: string;
+  codeOTP: string;
+  units?: { unit: string }[];
+  profile?: {
+    name: string;
+    surname: string;
+    country: string;
+    phone: string;
+    avatarUrl: string;
+    documentId: string; // Número de identificación
+    birthdate: Date;
+  };
   createdAt: string;
   updatedAt: string;
+}
+
+export interface UserTableProps {
+  rows: IUserAPI[];
 }

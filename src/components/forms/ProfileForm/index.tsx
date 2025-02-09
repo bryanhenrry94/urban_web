@@ -3,17 +3,9 @@ import React, { FC, useEffect, useCallback } from "react";
 import Swal from "sweetalert2";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { UserProfile } from "@/types";
+import { IUserProfile } from "@/types";
 import { useUserApi } from "@/hooks/useUserApi";
-
-const schema = yup
-  .object({
-    name: yup.string().required("El nombre es requerido"),
-  })
-  .required();
-
-type FormData = yup.InferType<typeof schema>;
+import { UserProfileSchema } from "@/validations";
 
 const ProfileForm: FC<{ id: string }> = ({ id }) => {
   const { updateProfile, fetchUser } = useUserApi();
@@ -22,8 +14,8 @@ const ProfileForm: FC<{ id: string }> = ({ id }) => {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<FormData>({
-    resolver: yupResolver(schema),
+  } = useForm<IUserProfile>({
+    resolver: yupResolver(UserProfileSchema),
   });
 
   const loadUser = useCallback(async () => {
@@ -31,7 +23,7 @@ const ProfileForm: FC<{ id: string }> = ({ id }) => {
       if (!id) return;
       const data = await fetchUser(id);
 
-      console.log("user Profile: ", data)
+      console.log("user Profile: ", data);
 
       if (data) {
         setValue("name", data.name);
@@ -47,7 +39,7 @@ const ProfileForm: FC<{ id: string }> = ({ id }) => {
     }
   }, [id, loadUser]);
 
-  const onSubmit = async (data: UserProfile) => {
+  const onSubmit = async (data: IUserProfile) => {
     try {
       if (!id) return;
 

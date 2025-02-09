@@ -40,7 +40,7 @@ const schemaStep2 = yup.object({
   companyName: yup
     .string()
     .required("El campo nombre de la urbannización es obligatorio"),
-  identification: yup.string().required("El campo ID Fiscal es obligatorio"),
+  taxId: yup.string().required("El campo ID Fiscal es obligatorio"),
   address: yup.string().required("El dirección es obligatorio"),
 });
 

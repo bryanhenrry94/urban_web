@@ -1,15 +1,15 @@
 import React from "react";
 import { BsDot } from "react-icons/bs";
-import { FiUsers } from "react-icons/fi";
-import { MdManageHistory, MdSettings } from "react-icons/md";
-import { IoHomeOutline } from "react-icons/io5";
-import { GrSecure } from "react-icons/gr";
-import {
-  FaForumbee,
-  FaChartBar,
-  FaMoneyBillWave,
-  FaUniversity,
-} from "react-icons/fa";
+import { LuLayoutDashboard } from "react-icons/lu";
+import { LuChartNoAxesCombined } from "react-icons/lu";
+import { LuUsers } from "react-icons/lu";
+import { LuHouse } from "react-icons/lu";
+import { LuLogs } from "react-icons/lu";
+import { LuMessageSquareText } from "react-icons/lu";
+import { LuChartBar } from "react-icons/lu";
+import { LuFileStack } from "react-icons/lu";
+import { LuPiggyBank } from "react-icons/lu";
+import { LuSettings } from "react-icons/lu";
 
 export interface MenuItem {
   name: string;
@@ -26,13 +26,13 @@ export const menuItemsList: MenuItem[] = [
       {
         name: "Panel de Control",
         path: "/dashboard",
-        icon: <IoHomeOutline />,
+        icon: <LuLayoutDashboard />,
         isParent: true,
       },
       {
         name: "Contabilidad",
         path: "/management/contabilidad",
-        icon: <MdManageHistory />,
+        icon: <LuChartNoAxesCombined />,
         isParent: true,
         items: [
           {
@@ -42,7 +42,7 @@ export const menuItemsList: MenuItem[] = [
           },
           {
             name: "Plan de Cuentas",
-            path: "/management/accounting/chart-of-accounts",
+            path: "/management/accounting/ledger-accounts",
             icon: <BsDot />,
           },
           {
@@ -53,24 +53,37 @@ export const menuItemsList: MenuItem[] = [
         ],
       },
       {
-        name: "Residentes",
-        path: "/management/residentes",
-        icon: <FiUsers />,
+        name: "Unidades",
+        path: "/management/units",
+        icon: <LuHouse />,
         isParent: true,
         items: [
           {
             name: "Agregar/Editar",
-            path: "/management/residents",
+            path: "/management/units",
+            icon: <BsDot />,
+          },
+        ],
+      },
+      {
+        name: "Personas",
+        path: "/management/persons",
+        icon: <LuUsers />,
+        isParent: true,
+        items: [
+          {
+            name: "Agregar/Editar",
+            path: "/management/persons",
             icon: <BsDot />,
           },
           {
             name: "Historial de Pagos",
-            path: "/management/residents/history",
+            path: "/management/persons/history",
             icon: <BsDot />,
           },
           {
             name: "Enviar Notificaciones",
-            path: "/management/residents/notifications",
+            path: "/management/persons/notifications",
             icon: <BsDot />,
           },
         ],
@@ -83,7 +96,7 @@ export const menuItemsList: MenuItem[] = [
       {
         name: "Accesos",
         path: "/access-control",
-        icon: <GrSecure />,
+        icon: <LuLogs />,
         isParent: true,
         items: [
           {
@@ -111,7 +124,7 @@ export const menuItemsList: MenuItem[] = [
       {
         name: "Comunicación",
         path: "/communication",
-        icon: <FaForumbee />,
+        icon: <LuMessageSquareText />,
         isParent: true,
         items: [
           {
@@ -139,7 +152,7 @@ export const menuItemsList: MenuItem[] = [
       {
         name: "Reportes",
         path: "/reports-finance/reports",
-        icon: <FaChartBar />,
+        icon: <LuChartBar />,
         isParent: true,
         items: [
           {
@@ -177,7 +190,7 @@ export const menuItemsList: MenuItem[] = [
       {
         name: "Transacciones",
         path: "/reports-finance/transactions",
-        icon: <FaMoneyBillWave />,
+        icon: <LuFileStack />,
         isParent: true,
         items: [
           {
@@ -205,7 +218,7 @@ export const menuItemsList: MenuItem[] = [
       {
         name: "Bancos",
         path: "/reports-finance/banks",
-        icon: <FaUniversity />,
+        icon: <LuPiggyBank />,
         isParent: true,
         items: [
           {
@@ -233,7 +246,7 @@ export const menuItemsList: MenuItem[] = [
       {
         name: "Configuración",
         path: "/settings",
-        icon: <MdSettings />,
+        icon: <LuSettings />,
         isParent: true,
         items: [
           {

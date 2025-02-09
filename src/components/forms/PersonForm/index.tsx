@@ -1,69 +1,103 @@
 "use client";
 import React, { FC, useEffect, useCallback, useState } from "react";
 import Swal from "sweetalert2";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { useRouter } from "next/navigation";
 import { usePersonApi } from "@/hooks/usePersonApi";
 
-const schema = yup
-  .object({
-    name: yup.string().required("El nombre es requerido"),
-    email: yup.string().required("El email es requerido"),
-    identification: yup
-      .string()
-      .required("El número de identificación es requerido"),
-    phone: yup.string().notRequired(),
-    address: yup.string().notRequired(),
-    roles: yup.array().of(yup.string()).required("El rol es requerido"),
-    companyName: yup.string().notRequired(),
-  })
-  .required();
+import { schema } from "./validations";
+import { IPerson } from "@/types";
+import {
+  Box,
+  Button,
+  Checkbox,
+  FormControl,
+  FormControlLabel,
+  FormHelperText,
+  Grid2,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+} from "@mui/material";
 
-type FormData = yup.InferType<typeof schema>;
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
 
 const PersonForm: FC<{ id?: string }> = ({ id }) => {
-  const { savePerson, updatePerson, fetchPerson, error } = usePersonApi();
-
   const router = useRouter();
   const [modeEdit, setModeEdit] = useState(false);
+  const { savePerson, updatePerson, fetchPerson } = usePersonApi();
+
+  const [roleName, setRoleName] = React.useState<string[]>([]);
+
+  const roles = [
+    {
+      name: "owner",
+      description: "Propietario",
+    },
+    {
+      name: "resident",
+      description: "Residente",
+    },
+    {
+      name: "visitor",
+      description: "Visitante",
+    },
+    {
+      name: "security",
+      description: "Seguridad",
+    },
+    {
+      name: "client",
+      description: "Cliente",
+    },
+    {
+      name: "supplier",
+      description: "Proveedor",
+    },
+    {
+      name: "employee",
+      description: "Empleado",
+    },
+  ];
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
-    setValue,
-  } = useForm<FormData>({
+    reset,
+    watch,
+  } = useForm<IPerson>({
     resolver: yupResolver(schema),
   });
-
-  useEffect(() => {
-    if (error) {
-      Swal.fire({ title: "Aviso", text: error, icon: "error" });
-    }
-  }, [error]);
 
   const loadUser = useCallback(async () => {
     try {
       if (!id) return;
       const currentPerson = await fetchPerson(id);
 
-      setModeEdit(true);
-
       if (currentPerson) {
-        setValue("name", currentPerson.name);
-        setValue("email", currentPerson.email);
-        setValue("phone", currentPerson.phone);
-        setValue("address", currentPerson.address);
-        setValue("identification", currentPerson.identification);
-        setValue("roles", currentPerson.roles);
-        setValue("companyName", currentPerson.companyName);
+        reset(currentPerson);
+        setModeEdit(true);
       }
     } catch (error: Error | any) {
       Swal.fire({ title: "Aviso", text: error.message, icon: "error" });
     }
-  }, [id, setValue]);
+  }, [id]);
 
   useEffect(() => {
     if (id) {
@@ -71,7 +105,7 @@ const PersonForm: FC<{ id?: string }> = ({ id }) => {
     }
   }, [id, loadUser]);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: IPerson) => {
     try {
       if (modeEdit) {
         if (!id) return;
@@ -83,12 +117,12 @@ const PersonForm: FC<{ id?: string }> = ({ id }) => {
 
       Swal.fire({
         title: "Aviso",
-        text: `Usuario ${modeEdit ? "actualizado" : "guardado"} correctamente`,
+        text: `Persona ${modeEdit ? "actualizado" : "guardado"} correctamente`,
         icon: "success",
         confirmButtonColor: "#22C55E",
         confirmButtonText: "Ok",
       });
-      router.push("/secure/persons");
+      router.push("/management/persons");
     } catch (error: Error | any) {
       Swal.fire({
         title: "Aviso",
@@ -101,142 +135,214 @@ const PersonForm: FC<{ id?: string }> = ({ id }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-wrap gap-2 p-4 border-b-2">
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="name" className="font-normal text-md mb-1">
-            Nombre:
-          </label>
-          <input
-            id="name"
-            type="text"
-            {...register("name")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Nombre"
-            disabled={modeEdit ? true : false}
+    <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
+      <Grid2 container spacing={1}>
+        <Grid2 size={{ xs: 12, sm: 6 }}>
+          <FormControl fullWidth size="small" error={!!errors.type}>
+            <InputLabel id="type-label">Tipo</InputLabel>
+            <Controller
+              name="type"
+              control={control}
+              defaultValue="natural"
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  labelId="type-label"
+                  label="Tipo"
+                  error={!!errors.type}
+                  disabled={modeEdit ? true : false}
+                >
+                  <MenuItem value="natural">Persona Natural</MenuItem>
+                  <MenuItem value="juridica">Persona Jurídica</MenuItem>
+                </Select>
+              )}
+            />
+            <FormHelperText sx={{ color: "red" }}>
+              {errors.type?.message?.toString()}
+            </FormHelperText>
+          </FormControl>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6 }}>
+          <Controller
+            name="numberId"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                margin="dense"
+                fullWidth
+                label="Número de identificación"
+                placeholder="Número de identificación"
+                error={!!errors.numberId}
+                helperText={errors.numberId?.message}
+                size="small"
+                disabled={modeEdit ? true : false}
+              />
+            )}
           />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.name?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="email" className="font-normal text-md mb-1">
-            Correo:
-          </label>
-          <input
-            id="email"
-            type="email"
-            {...register("email")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Correo"
-          />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.email?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="identification" className="font-normal text-md mb-1">
-            Número de identificación:
-          </label>
-          <input
-            id="identification"
-            type="identification"
-            {...register("identification")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Número de identificación:"
-          />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.identification?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <div className="relative">
-            <label htmlFor="roles" className="font-normal text-md mb-1">
-              Rol:
-            </label>
-            <div className="p-2 rounded-md border-2 font-normal text-md bg-transparent">
-              {["owner", "resident", "visitor"].map((role) => (
-                <div key={role} className="flex items-center">
-                  <input
-                    type="checkbox"
-                    id={role}
-                    value={role}
-                    {...register("roles")}
-                    className="mr-2"
+        </Grid2>
+        {watch("type") === "natural" && (
+          <>
+            <Grid2 size={{ xs: 12, sm: 6 }}>
+              <Controller
+                name="name"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    margin="dense"
+                    fullWidth
+                    label="Nombres"
+                    placeholder="Ejemplo: Juan"
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
+                    size="small"
                   />
-                  <label htmlFor={role} className="font-normal text-md">
-                    {role === "owner"
-                      ? "Encargado"
-                      : role === "resident"
-                      ? "Propietario"
-                      : "Visitante"}
-                  </label>
-                </div>
-              ))}
-            </div>
-            <p className="text-red-500 font-normal text-sm mb-2">
-              {errors.roles?.message}
-            </p>
-          </div>
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.roles?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="companyName" className="font-normal text-md mb-1">
-            Razon Social:
-          </label>
-          <input
-            id="companyName"
-            type="companyName"
-            {...register("companyName")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Razon Social"
+                )}
+              />
+            </Grid2>
+            <Grid2 size={{ xs: 12, sm: 6 }}>
+              <Controller
+                name="surname"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    margin="dense"
+                    fullWidth
+                    label="Apellidos"
+                    placeholder="Ejemplo: Perez"
+                    error={!!errors.surname}
+                    helperText={errors.surname?.message}
+                    size="small"
+                  />
+                )}
+              />
+            </Grid2>
+          </>
+        )}
+        {watch("type") === "juridica" && (
+          <>
+            <Grid2 size={{ xs: 12, sm: 12 }}>
+              <Controller
+                name="companyName"
+                control={control}
+                render={({ field }) => (
+                  <TextField
+                    {...field}
+                    margin="dense"
+                    fullWidth
+                    label="Razon Social"
+                    placeholder="Razon Social"
+                    error={!!errors.companyName}
+                    helperText={errors.companyName?.message}
+                    size="small"
+                  />
+                )}
+              />
+            </Grid2>
+          </>
+        )}
+        <Grid2 size={{ xs: 12, sm: 6 }}>
+          <Controller
+            name="email"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                margin="dense"
+                fullWidth
+                label="Correo"
+                placeholder="Correo"
+                error={!!errors.email}
+                helperText={errors.email?.message}
+                size="small"
+              />
+            )}
           />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.companyName?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="address" className="font-normal text-md mb-1">
-            Dirección:
-          </label>
-          <input
-            id="address"
-            type="address"
-            {...register("address")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Dirección"
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6 }}>
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                margin="dense"
+                fullWidth
+                label="Teléfono"
+                placeholder="Teléfono"
+                error={!!errors.phone}
+                helperText={errors.phone?.message}
+                size="small"
+              />
+            )}
           />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.address?.message}
-          </p>
-        </div>
-        <div className="flex flex-col w-full lg:w-1/2">
-          <label htmlFor="phone" className="font-normal text-md mb-1">
-            Teléfono:
-          </label>
-          <input
-            id="phone"
-            type="phone"
-            {...register("phone")}
-            className="p-2 rounded-md border-2 font-normal text-md bg-transparent"
-            placeholder="Teléfono"
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 12 }}>
+          <Controller
+            name="address"
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                margin="dense"
+                fullWidth
+                label="Dirección"
+                placeholder="Dirección"
+                error={!!errors.address}
+                helperText={errors.address?.message}
+                size="small"
+                multiline
+              />
+            )}
           />
-          <p className="text-red-500 font-normal text-sm mb-2">
-            {errors.phone?.message}
-          </p>
-        </div>
-        <div className="flex w-full">
-          <button
-            type="submit"
-            className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
-          >
-            {modeEdit ? "Actualizar" : "Guardar"}
-          </button>
-        </div>
-      </div>
-    </form>
+        </Grid2>
+        <Grid2 size={{ xs: 12, sm: 6 }}>
+          <Controller
+            name="roles"
+            control={control}
+            render={({ field: { onChange, value = [] } }) => (
+              <FormControl fullWidth margin="dense" size="small">
+                <InputLabel id="demo-multiple-checkbox-label">Roles</InputLabel>
+                <Select
+                  labelId="demo-multiple-checkbox-label"
+                  id="demo-multiple-checkbox"
+                  error={!!errors.roles}
+                  multiple
+                  value={value || []} // Evita errores si `value` es `undefined`
+                  onChange={(event) => {
+                    onChange(event.target.value); // Asegura que el `value` se actualice correctamente
+                    // handleRoleChange();
+                  }}
+                  input={<OutlinedInput label="Roles" />}
+                  renderValue={(selected) => selected.join(", ")}
+                  MenuProps={MenuProps}
+                >
+                  {roles.map((rol) => (
+                    <MenuItem key={rol.name} value={rol.name}>
+                      <Checkbox checked={value.includes(rol.name)} />
+                      <ListItemText primary={rol.description} />
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.roles && (
+                  <FormHelperText sx={{ color: "red" }}>
+                    {String(errors.roles?.message || "")}
+                  </FormHelperText>
+                )}
+              </FormControl>
+            )}
+          />
+        </Grid2>
+      </Grid2>
+
+      <Box sx={{ display: "flex", width: "100%" }}>
+        <Button type="submit" variant="contained" color="primary">
+          {modeEdit ? "Actualizar" : "Guardar"}
+        </Button>
+      </Box>
+    </Box>
   );
 };
 

@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Container, TextField, Typography } from "@mui/material";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import Image from "next/image";
 import BuildHomeSVG from "@/assets/images/undraw_build-your-home_5opd.svg";
 
 const CompanyStep = () => {
   const {
-    register,
+    control,
     formState: { errors },
   } = useFormContext();
 
@@ -36,51 +36,66 @@ const CompanyStep = () => {
           overflowY: "auto",
         }}
       >
-        <TextField
-          {...register("companyName")}
-          margin="dense"
-          required
-          fullWidth
-          id="companyName"
-          label="Nombre de la Urbanización"
-          placeholder="Ejemplo: Urbanización Los Jardines"
+        <Controller
           name="companyName"
-          type="text"
-          autoComplete="companyName"
-          autoFocus
-          error={!!errors.companyName}
-          helperText={errors.companyName?.message?.toString()}
-          size="small"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              margin="dense"
+              required
+              fullWidth
+              id="companyName"
+              label="Nombre de la Urbanización"
+              placeholder="Ejemplo: Urbanización Los Jardines"
+              type="text"
+              autoComplete="companyName"
+              autoFocus
+              error={!!errors.companyName}
+              helperText={errors.companyName?.message?.toString()}
+              size="small"
+            />
+          )}
         />
-        <TextField
-          {...register("identification")}
-          margin="dense"
-          required
-          fullWidth
-          id="identification"
-          label="ID Fiscal"
-          placeholder="Ejemplo: 1234567890"
-          name="identification"
-          type="text"
-          autoComplete="identification"
-          error={!!errors.identification}
-          helperText={errors.identification?.message?.toString()}
-          size="small"
+        <Controller
+          name="taxId"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              margin="dense"
+              required
+              fullWidth
+              id="taxId"
+              label="ID Fiscal"
+              placeholder="Ejemplo: 1234567890"
+              type="text"
+              autoComplete="taxId"
+              error={!!errors.taxId}
+              helperText={errors.taxId?.message?.toString()}
+              size="small"
+            />
+          )}
         />
-        <TextField
-          {...register("address")}
-          margin="dense"
-          required
-          fullWidth
-          id="address"
-          label="Dirección"
-          placeholder="Ejemplo: Av. Principal 123"
+        <Controller
           name="address"
-          type="text"
-          autoComplete="address"
-          error={!!errors.address}
-          helperText={errors.address?.message?.toString()}
-          size="small"
+          control={control}
+          render={({ field }) => (
+            <TextField
+              {...field}
+              margin="dense"
+              required
+              fullWidth
+              id="address"
+              label="Dirección"
+              placeholder="Ejemplo: Av. Principal 123"
+              type="text"
+              autoComplete="address"
+              error={!!errors.address}
+              helperText={errors.address?.message?.toString()}
+              size="small"
+            />
+          )}
         />
       </Box>
     </Container>

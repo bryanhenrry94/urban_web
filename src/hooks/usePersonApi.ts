@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useAxios } from "@/hooks/useAxios";
-import { Person, APIPerson } from "@/types/person";
+import { IPerson, IPersonAPI } from "@/types/person";
 import { AxiosError } from "axios";
 
 export const usePersonApi = () => {
   const apiClient = useAxios();
-  const [persons, setPersons] = useState<APIPerson[]>([]);
+  const [persons, setPersons] = useState<IPersonAPI[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -45,7 +45,7 @@ export const usePersonApi = () => {
     }
   };
 
-  const savePerson = async (person: Person) => {
+  const savePerson = async (person: IPerson) => {
     try {
       setLoading(true);
 
@@ -58,7 +58,7 @@ export const usePersonApi = () => {
     }
   };
 
-  const updatePerson = async (id: string, updatedData: Partial<Person>) => {
+  const updatePerson = async (id: string, updatedData: Partial<IPerson>) => {
     try {
       setLoading(true);
 

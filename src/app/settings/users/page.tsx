@@ -1,25 +1,24 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
-  Button,
   TextField,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
   Typography,
   Box,
+  Container,
+  Breadcrumbs,
+  IconButton,
 } from "@mui/material";
 import { LuFilter } from "react-icons/lu";
 import { LuPlus } from "react-icons/lu";
+import { MdOutlineHome } from "react-icons/md";
+import { MdOutlinePrint } from "react-icons/md";
+import { MdOutlineDownload } from "react-icons/md";
 import { useUserApi } from "@/hooks/useUserApi";
 import { useRouter } from "next/navigation";
+import Table from "./Table";
 
 const SettingUsersPage = () => {
-  const { users, fetchUsers } = useUserApi();
+  const { users, fetchUsers, forgotPassword } = useUserApi();
   const router = useRouter();
   const [search, setSearch] = useState("");
 
@@ -42,77 +41,70 @@ const SettingUsersPage = () => {
   };
 
   return (
-    <div>
-      <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-        Administración de Usuarios
-      </Typography>
-      <Typography variant="caption">
-        Aquí puedes administrar los usuarios de la aplicación.
-      </Typography>
+    <Container
+      maxWidth="lg"
+      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+    >
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
-          mt: 2,
+          bgcolor: "background.paper",
+          borderRadius: 2,
+          p: 1,
         }}
       >
-        <Typography variant="body2" gutterBottom>
-          Todos los usuarios: {users.length}
-        </Typography>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+        <Breadcrumbs aria-label="breadcrumb">
+          <IconButton color="primary">
+            <MdOutlineHome size={20} />
+          </IconButton>
+          {/* <Link
+            color="inherit"
+            href="/material-ui/getting-started/installation/"
+            style={{ textDecoration: "none" }}
+          >
+            Configuración
+          </Link> */}
+          <Typography sx={{ color: "text.primary" }}>Usuarios</Typography>
+        </Breadcrumbs>
+      </Box>
+      <Box sx={{ bgcolor: "background.paper", borderRadius: 2, p: 2 }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <TextField
-            id="outlined-search"
-            label="Search field"
-            type="search"
-            margin="dense"
-            size="small"
-            sx={{ display: { xs: "none", sm: "block" } }}
-            value={search}
+            placeholder="Buscar"
             onChange={handleSearchChange}
+            size="small"
           />
-          <Button
-            variant="outlined"
-            size="small"
-            sx={{ textTransform: "none" }}
-            startIcon={<LuFilter />}
-          >
-            Filtro
-          </Button>
-          <Button
-            variant="contained"
-            size="small"
-            sx={{ textTransform: "none" }}
-            startIcon={<LuPlus />}
-            onClick={() => router.push("/settings/users/add")}
-          >
-            Usuario
-          </Button>
+          <Box>
+            <IconButton>
+              <MdOutlineDownload />
+            </IconButton>
+            <IconButton>
+              <MdOutlinePrint />
+            </IconButton>
+            <IconButton
+              color="primary"
+              onClick={() => router.push("/settings/users/create")}
+            >
+              <LuPlus />
+            </IconButton>
+          </Box>
+        </Box>
+        <Box
+          sx={{
+            mt: 2,
+            overflow: "auto",
+            maxWidth: { xs: 350, md: "100%" },
+          }}
+        >
+          <Table rows={filteredUsers} />
         </Box>
       </Box>
-
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {filteredUsers.map((user) => (
-              <TableRow key={user._id}>
-                <TableCell>{user._id}</TableCell>
-                <TableCell>{user.name}</TableCell>
-                <TableCell>{user.email}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+    </Container>
   );
 };
 

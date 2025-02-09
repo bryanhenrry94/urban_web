@@ -116,7 +116,7 @@ const ForgotPassword = () => {
       title: "Aviso",
       text: `Codigo OTP enviado al correo ${methods.getValues("email")}`,
       icon: "info",
-      confirmButtonColor: "#22C55E",
+      confirmButtonColor: "#14b8a6",
       confirmButtonText: "Ok",
     });
   };

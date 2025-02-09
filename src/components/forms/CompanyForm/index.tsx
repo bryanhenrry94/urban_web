@@ -15,6 +15,7 @@ const schema = yup
     address: yup.string().notRequired(),
     phone: yup.string().notRequired(),
     email: yup.string().email().required("Correo es requerido"),
+    taxId: yup.string().required("Tax ID es requerido"),
   })
   .required();
 
@@ -54,7 +55,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
         setValue("name", currentCompany.name);
         setValue("address", currentCompany.address);
         setValue("phone", currentCompany.phone);
-        setValue("email", currentCompany.email);
+        setValue("taxId", currentCompany.taxId);
       }
     } catch (error: Error | any) {
       Swal.fire({ title: "Aviso", text: error.message, icon: "error" });
@@ -98,7 +99,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    // <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex flex-wrap gap-2">
         <div className="flex flex-col w-full lg:w-1/4">
           <label htmlFor="identification" className="font-normal text-md mb-1">
@@ -115,6 +116,24 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
           <p className="text-red-500 font-normal text-sm mt-1">
             {errors.identification?.message}
           </p>
+        </div>
+        <div className="flex flex-col w-full lg:w-1/4">
+          <label htmlFor="taxId" className="font-normal text-md mb-1">
+            Tax ID:
+          </label>
+          <input
+            id="taxId"
+            type="text"
+            {...register("taxId")}
+            className="p-2 rounded-md border border-gray-300 font-normal text-md bg-white"
+            placeholder="Tax ID"
+            disabled={modeEdit ? true : false}
+          />
+          <p className="text-red-500 font-normal text-sm mt-1">
+            {errors.taxId?.message}
+          </p>
+        </div>
+        <div className="flex flex-col w-full lg:w-1/2">
         </div>
         <div className="flex flex-col w-full lg:w-1/2">
           <label htmlFor="name" className="font-normal text-md mb-1">
@@ -184,7 +203,7 @@ const CompanyForm: FC<{ id?: string }> = ({ id }) => {
           </button>
         </div>
       </div>
-    </form>
+    // </form>
   );
 };
 

@@ -18,7 +18,7 @@ import {
   Modal,
 } from "@mui/material";
 import { LuCheck } from "react-icons/lu";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, Controller } from "react-hook-form";
 import Image from "next/image";
 import CreditCardSVG from "@/assets/images/undraw_credit-card_t6qm.svg";
 
@@ -54,6 +54,7 @@ const PlanStep = () => {
   const {
     register,
     formState: { errors },
+    control,
   } = useFormContext();
 
   const plans: Plan[] = [
@@ -144,38 +145,49 @@ const PlanStep = () => {
         }}
       >
         <FormControl size="small" fullWidth margin="normal">
-          <InputLabel id="demo-select-small-label">Plan</InputLabel>
-          <Select
-            labelId="demo-select-small-label"
-            id="demo-select-small"
-            label="Plan"
-            // value={selectedPlan ? selectedPlan.name : ""}
-            {...register("plan")}
-            error={!!errors.plan}
-            onChange={handleSelectedPlan}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            {plans.map((plan) => (
-              <MenuItem key={plan.name} value={plan.code}>
-                {plan.name}
-              </MenuItem>
-            ))}
-          </Select>
+          <Controller
+            name="plan"
+            control={control}
+            render={({ field }) => (
+              <FormControl fullWidth size="small">
+                <InputLabel id="select-plan">Plan</InputLabel>
+                <Select
+                  labelId="select-plan"
+                  id="demo-simple-select"
+                  label="Plan"
+                  {...field}
+                  required
+                  onChange={(e) => {
+                    field.onChange(e);
+                    handleSelectedPlan(e);
+                  }}
+                  error={!!errors.plan}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {plans.map((plan) => (
+                    <MenuItem key={plan.name} value={plan.code}>
+                      {plan.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          />
         </FormControl>
 
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            maxHeight: "200px",
-            overflowY: "scroll",
-            mt: 2,
-          }}
-        >
-          {selectedPlan && (
+        {selectedPlan && (
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              maxHeight: "200px",
+              overflowY: "scroll",
+              mt: 2,
+            }}
+          >
             <Paper
               elevation={3}
               sx={{
@@ -254,8 +266,8 @@ const PlanStep = () => {
                 </Box>
               </Modal>
             </Paper>
-          )}
-        </Box>
+          </Box>
+        )}
       </Box>
     </Container>
   );

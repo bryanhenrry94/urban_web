@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useAxios } from "@/hooks/useAxios";
-import { APIUser, User, UserProfile } from "@/types/user";
+import { IUserAPI, IUserForm, IUserProfile } from "@/types/user";
 import { AxiosError } from "axios";
 
 export const useUserApi = () => {
   const apiClient = useAxios();
-  const [users, setUsers] = useState<APIUser[]>([]);
+  const [users, setUsers] = useState<IUserAPI[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -57,7 +57,7 @@ export const useUserApi = () => {
     }
   };
 
-  const updateUser = async (id: string, data: User) => {
+  const updateUser = async (id: string, data: IUserForm) => {
     try {
       setLoading(true);
       const response = await apiClient.put(`/users/${id}`, data);
@@ -71,13 +71,27 @@ export const useUserApi = () => {
     }
   };
 
-  const saveUser = async (data: User) => {
+  const saveUser = async (data: IUserForm) => {
     try {
       setLoading(true);
       const response = await apiClient.post("/users", data);
       setUsers((prev) => [...prev, response.data.data]);
     } catch (error) {
       handleError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const forgotPassword = async (email: string) => {
+    try {
+      setLoading(true);
+      const response = await apiClient.post("/users/forgot-password", {
+        email,
+      });
+      return response;
+    } catch (error) {
+      throw error;
     } finally {
       setLoading(false);
     }
@@ -140,7 +154,7 @@ export const useUserApi = () => {
     }
   };
 
-  const updateProfile = async (id: string, data: UserProfile) => {
+  const updateProfile = async (id: string, data: IUserProfile) => {
     try {
       setLoading(true);
       const response = await apiClient.put(`/users/${id}`, data);
@@ -161,6 +175,7 @@ export const useUserApi = () => {
     deleteUser,
     updateUser,
     saveUser,
+    forgotPassword,
     resetPassword,
     changePassword,
     updateProfile,

@@ -133,7 +133,7 @@ const PeoplePage: React.FC = () => {
                   </td>
                   <td className="px-4 py-2">
                     <div className="flex flex-wrap gap-2">
-                      {person.roles.map((role, index) => (
+                      {person.roles?.map((role, index) => (
                         <div
                           key={index}
                           className="bg-teal-100 text-teal-800 px-2 py-1 rounded-md"
