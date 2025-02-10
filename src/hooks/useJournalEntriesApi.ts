@@ -2,26 +2,32 @@ import { useState } from "react";
 import { useAxios } from "@/hooks/useAxios";
 import { AxiosError } from "axios";
 import { IJournalEntriesForm } from "@/types";
+import Swal from "sweetalert2";
 
 export const useJournalEntriesApi = () => {
   const apiClient = useAxios();
   const [loading, setLoading] = useState<boolean>(false);
-  const [errorAxios, setErrorAxios] = useState<string>("");
 
-  const handleError = (error: unknown) => {
+  const handleError = async (error: unknown) => {
+    let message = "An unknown error occurred";
+
     if (error instanceof AxiosError) {
-      setErrorAxios(error.response?.data.message || "Unknown Axios error");
+      message = error.response?.data.message || "Unknown Axios error";
     } else if (error instanceof Error) {
-      setErrorAxios(error.message);
-    } else {
-      setErrorAxios("An unknown error occurred");
+      message = error.message;
     }
+
+    await Swal.fire({
+      title: "Error",
+      text: message,
+      icon: "error",
+      confirmButtonColor: "#14b8a6",
+    });
   };
 
   const fetchJournalEntries = async () => {
     try {
       setLoading(true);
-
       const response = await apiClient.get("/accounting/journal-entries");
       return response.data.data;
     } catch (error) {
@@ -92,7 +98,6 @@ export const useJournalEntriesApi = () => {
 
   return {
     loading,
-    errorAxios,
     fetchJournalEntries,
     fetchFournalEntry,
     saveJournalEntry,

@@ -16,17 +16,14 @@ import {
 } from "@mui/material";
 import { FiMoreVertical } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import Swal from "sweetalert2";
-import { useUnitApi } from "@/hooks/useUnitApi";
 import { IJournalEntries, JournalEntriesTableProps } from "@/types"; // Adjust the import path as necessary
+import { useJournalEntriesContext } from "@/contexts/JournalEntriesContext";
 
 const TableJournal: FC<JournalEntriesTableProps> = ({ row }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [selectedRow, setSelectedRow] = React.useState<IJournalEntries | null>(
-    null
-  );
 
-  const { deleteUnit } = useUnitApi();
+  const { handleDelete, rowSelected, setRowSelected } =
+    useJournalEntriesContext();
 
   const router = useRouter();
   const open = Boolean(anchorEl);
@@ -36,40 +33,16 @@ const TableJournal: FC<JournalEntriesTableProps> = ({ row }) => {
     row: IJournalEntries
   ) => {
     setAnchorEl(event.currentTarget);
-    setSelectedRow(row); // Guardar el ID seleccionado
+    setRowSelected(row); // Guardar el ID seleccionado
   };
 
   const handleClose = () => {
     setAnchorEl(null);
-    setSelectedRow(null);
+    setRowSelected(null);
   };
 
   const handleEdit = () => {
-    router.push(`/management/accounting/journal-entries/${selectedRow?._id}`);
-    handleClose();
-  };
-
-  const handleDelete = async () => {
-    const result = await Swal.fire({
-      title: "¿Estás seguro?",
-      text: "¡No podrás revertir esto!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#14b8a6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Sí, eliminarlo!",
-    });
-
-    if (result.isConfirmed) {
-      try {
-        // Realiza la solicitud de autenticación a tu API
-        await deleteUnit(selectedRow?._id as string);
-        Swal.fire("Eliminado!", "La unidad ha sido eliminada.", "success");
-      } catch (error) {
-        Swal.fire("Error", (error as Error).message, "error");
-      }
-    }
-
+    router.push(`/management/accounting/journal-entries/${rowSelected?._id}`);
     handleClose();
   };
 
@@ -92,7 +65,6 @@ const TableJournal: FC<JournalEntriesTableProps> = ({ row }) => {
         }}
       >
         <Box>
-          <Typography variant="h6">{row.reference}</Typography>
           <Typography variant="body2" sx={{ color: "text.secondary" }}>
             {new Date(row.date).toLocaleDateString()} - {row.description}
           </Typography>
@@ -129,10 +101,10 @@ const TableJournal: FC<JournalEntriesTableProps> = ({ row }) => {
           <TableBody>
             {row?.details?.map((item) => (
               <TableRow key={item._id}>
-                <TableCell>{item.ledgerAccount?.name}</TableCell>
+                <TableCell>{item.account?.name}</TableCell>
                 <TableCell align="right">{item.debit.toFixed(2)}</TableCell>
                 <TableCell align="right">{item.credit.toFixed(2)}</TableCell>
-                <TableCell>{item.costCenter?.name}</TableCell>
+                <TableCell>{item.cost_center?.name}</TableCell>
               </TableRow>
             ))}
           </TableBody>

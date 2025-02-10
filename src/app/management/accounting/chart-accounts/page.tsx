@@ -8,7 +8,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { MdOutlineHome } from "react-icons/md";
-import TreeViewTable from "@/app/management/accounting/ledger-accounts/TreeViewTable";
+import TreeViewTable from "@/app/management/accounting/chart-accounts/TreeViewTable";
 import { ChartOfAccountsProvider } from "@/contexts/ChartOfAccountsContext";
 
 import HeaderOptions from "./Header";

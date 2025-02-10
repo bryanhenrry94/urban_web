@@ -16,8 +16,8 @@ import {
 } from "@mui/material";
 import { FiPlus } from "react-icons/fi";
 import { FiMinus } from "react-icons/fi";
-import MenuComponent from "@/app/management/accounting/ledger-accounts/Menu";
-import FormAccount from "@/app/management/accounting/ledger-accounts/FormAccount";
+import MenuComponent from "./Menu";
+import FormAccount from "./FormAccount";
 
 import { useChartOfAccountsContext } from "@/contexts/ChartOfAccountsContext";
 
@@ -111,19 +111,14 @@ const TreeViewTable: React.FC = () => {
   const [openStates, setOpenStates] = useState<{ [key: string]: boolean }>({});
 
   return (
-    <Box sx={{ p: 1, bgcolor: "background.default", borderRadius: 2, mt: 2 }}>
+    <Box sx={{ p: 1, bgcolor: "background.default", borderRadius: 2 }}>
       <TableContainer component={Paper}>
-        <Table>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell sx={{ width: 15 }}></TableCell>
               <TableCell sx={{ textAlign: "center", fontWeight: "bold" }}>
                 Cuenta
-              </TableCell>
-              <TableCell
-                sx={{ width: 150, textAlign: "center", fontWeight: "bold" }}
-              >
-                Saldo
               </TableCell>
             </TableRow>
           </TableHead>

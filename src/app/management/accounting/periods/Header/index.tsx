@@ -1,29 +1,30 @@
-import { useChartOfAccountsContext } from "@/contexts/ChartOfAccountsContext";
-import { usePersonApi } from "@/hooks/usePersonApi";
+import React from "react";
 import { Box, IconButton, TextField } from "@mui/material";
-import React, { useState } from "react";
 import {
+  MdOutlineAddCircle,
   MdOutlineDownload,
   MdOutlinePrint,
   MdOutlineRefresh,
 } from "react-icons/md";
 
+import { useAccountingPeriodsContext } from "@/contexts/AccountingPeriodsContext";
+
 const HeaderOptions = () => {
-  const [search, setSearch] = useState("");
-  const { accountsTree, loadAccountsTree } = useChartOfAccountsContext();
+  const { loadData, setOpenModal, setModeEdit, setRowSelected, setSearch } =
+    useAccountingPeriodsContext();
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(event.target.value);
   };
 
-  const filteredRows = accountsTree?.filter(
-    (accounts) =>
-      accounts?.name?.toLowerCase().includes(search.toLowerCase()) ||
-      accounts?.code?.toLowerCase().includes(search.toLowerCase())
-  );
+  const handleClicRefresh = () => {
+    loadData();
+  };
 
-  const handleClicRefresh = async () => {
-    await loadAccountsTree();
+  const handleClicAdd = () => {
+    setModeEdit(false);
+    setRowSelected(null);
+    setOpenModal(true);
   };
 
   return (
@@ -48,6 +49,9 @@ const HeaderOptions = () => {
         </IconButton>
         <IconButton>
           <MdOutlinePrint />
+        </IconButton>
+        <IconButton color="primary">
+          <MdOutlineAddCircle onClick={handleClicAdd} />
         </IconButton>
       </Box>
     </Box>

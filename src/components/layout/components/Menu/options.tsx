@@ -42,12 +42,17 @@ export const menuItemsList: MenuItem[] = [
           },
           {
             name: "Plan de Cuentas",
-            path: "/management/accounting/ledger-accounts",
+            path: "/management/accounting/chart-accounts",
             icon: <BsDot />,
           },
           {
             name: "Centros de Costos",
             path: "/management/accounting/cost-centers",
+            icon: <BsDot />,
+          },
+          {
+            name: "Periodos",
+            path: "/management/accounting/periods",
             icon: <BsDot />,
           },
         ],

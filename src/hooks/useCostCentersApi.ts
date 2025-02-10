@@ -1,21 +1,28 @@
 import { useState } from "react";
 import { useAxios } from "@/hooks/useAxios";
-import { CostCenters } from "@/types/costCenters";
+import { ICostCenters } from "@/types";
 import { AxiosError } from "axios";
+import Swal from "sweetalert2";
 
 export const useCostCentersApi = () => {
   const apiClient = useAxios();
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>("");
 
-  const handleError = (error: unknown) => {
+  const handleError = async (error: unknown) => {
+    let message = "An unknown error occurred";
+
     if (error instanceof AxiosError) {
-      setError(error.response?.data.message || "Unknown Axios error");
+      message = error.response?.data.message || "Unknown Axios error";
     } else if (error instanceof Error) {
-      setError(error.message);
-    } else {
-      setError("An unknown error occurred");
+      message = error.message;
     }
+
+    await Swal.fire({
+      title: "Error",
+      text: message,
+      icon: "error",
+      confirmButtonColor: "#14b8a6",
+    });
   };
 
   const fetchCostCenters = async () => {
@@ -44,11 +51,14 @@ export const useCostCentersApi = () => {
     }
   };
 
-  const saveCostCenter = async (costCenter: CostCenters) => {
+  const saveCostCenter = async (costCenter: ICostCenters) => {
     try {
       setLoading(true);
 
-      const response = await apiClient.post("/accounting/cost-centers", costCenter);
+      const response = await apiClient.post(
+        "/accounting/cost-centers",
+        costCenter
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);
@@ -59,12 +69,15 @@ export const useCostCentersApi = () => {
 
   const updateCostCenter = async (
     id: string,
-    updatedData: Partial<CostCenters>
+    updatedData: Partial<ICostCenters>
   ) => {
     try {
       setLoading(true);
 
-      const response = await apiClient.put(`/accounting/cost-centers/${id}`, updatedData);
+      const response = await apiClient.put(
+        `/accounting/cost-centers/${id}`,
+        updatedData
+      );
       return response.data.data;
     } catch (error) {
       handleError(error);
@@ -84,7 +97,6 @@ export const useCostCentersApi = () => {
 
   return {
     loading,
-    error,
     fetchCostCenters,
     fetchCostCenter,
     saveCostCenter,

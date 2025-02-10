@@ -1,20 +1,20 @@
-import { JournalEntries } from "./journalEntries";
-import { LedgerAccount } from "./ledgerAccount";
-import { CostCenter } from "./costCenter";
+import { IJournalEntries } from "./journalEntries";
+import { IChartAccount } from "./chartAccount";
+import { ICostCenters } from "./costCenters";
 
 export interface JournalEntriesDetail {
   _id: string;
-  journalEntry: JournalEntries;
-  ledgerAccount: LedgerAccount;
-  costCenter: CostCenter | null;
+  journal_entry: IJournalEntries;
+  account: IChartAccount;
   debit: number;
   credit: number;
+  cost_center: ICostCenters | null;
 }
 
 export interface JournalEntriesDetailForm {
-  journalEntry: string;
-  ledgerAccount: string;
-  costCenter: string;
+  journal_entry: string;
+  account: string;
   debit: number;
   credit: number;
+  cost_center: string;
 }

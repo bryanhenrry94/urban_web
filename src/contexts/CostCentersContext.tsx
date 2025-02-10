@@ -8,34 +8,16 @@ import React, {
   useMemo,
 } from "react";
 
-import { CostCenters } from "@/types/costCenters";
+import {
+  CostCentersContextProps,
+  ICostCenters,
+  ICostCentersAPI,
+} from "@/types";
 import { useSession } from "next-auth/react";
 import { useCostCentersApi } from "@/hooks/useCostCentersApi";
 import Swal from "sweetalert2";
 
-type CostCentersType = {
-  rows: CostCenters[] | null;
-  isLoading: boolean;
-  modeEdit: boolean;
-  costCenters: CostCenters[] | null;
-  openModal: boolean;
-  costCenterSelected: CostCenters | null;
-  search: string;
-  setModeEdit: React.Dispatch<React.SetStateAction<boolean>>;
-  loadCostCenters: () => void;
-  setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
-  setRows: React.Dispatch<React.SetStateAction<CostCenters[] | null>>;
-  setCostCenterSelected: React.Dispatch<
-    React.SetStateAction<CostCenters | null>
-  >;
-  handleFilter: (search: string) => void;
-  handleSave: (data: CostCenters) => void;
-  handleDelete: () => void;
-  handleEdit: () => void;
-  setSearch: React.Dispatch<React.SetStateAction<string>>;
-};
-
-const CostCentersContext = createContext<CostCentersType | undefined>(
+const CostCentersContext = createContext<CostCentersContextProps | undefined>(
   undefined
 );
 
@@ -51,15 +33,17 @@ export const CostCentersProvider: React.FC<{
     deleteCostCenter,
   } = useCostCentersApi();
 
-  const [rows, setRows] = useState<CostCenters[] | null>(null);
+  const [rows, setRows] = useState<ICostCentersAPI[] | null>(null);
   const [search, setSearch] = React.useState("");
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modeEdit, setModeEdit] = useState<boolean>(false);
-  const [costCenters, setCostCenters] = useState<CostCenters[] | null>(null);
+  const [costCenters, setCostCenters] = useState<ICostCentersAPI[] | null>(
+    null
+  );
   const [openModal, setOpenModal] = useState<boolean>(false);
   const [costCenterSelected, setCostCenterSelected] =
-    useState<CostCenters | null>(null);
+    useState<ICostCentersAPI | null>(null);
 
   useEffect(() => {
     if (status == "authenticated") {
@@ -72,13 +56,12 @@ export const CostCentersProvider: React.FC<{
   }, [search]);
 
   const handleFilter = () => {
-    const filteredRows = costCenters?.filter(
-      (costCenter) =>
-        costCenter?.name?.toLowerCase().includes(search.toLowerCase()) ||
-        costCenter?.description?.toLowerCase().includes(search.toLowerCase())
-    );
-
-    setRows(filteredRows || []);
+    if (search) {
+      const filteredRows = costCenters?.filter((costCenter) =>
+        costCenter?.name?.toLowerCase().includes(search.toLowerCase())
+      );
+      setRows(filteredRows || []);
+    }
   };
 
   const loadCostCenters = async () => {
@@ -86,8 +69,7 @@ export const CostCentersProvider: React.FC<{
     try {
       const data = await fetchCostCenters();
       setCostCenters(data);
-
-      handleFilter();
+      setRows(data);
     } catch (error) {
       console.error("Error fetching chart of costCenters:", error);
     } finally {
@@ -95,26 +77,24 @@ export const CostCentersProvider: React.FC<{
     }
   };
 
-  const handleSave = async (data: CostCenters) => {
+  const handleSave = async (data: ICostCenters) => {
     try {
-      if (modeEdit) {
-        console.log(
-          "costCenterSelected?._id as string",
-          costCenterSelected?._id as string
-        );
-        console.log("data", data);
+      const result = modeEdit
+        ? await updateCostCenter(costCenterSelected?._id as string, data)
+        : await saveCostCenter(data);
 
-        await updateCostCenter(costCenterSelected?._id as string, data);
-      } else {
-        await saveCostCenter(data);
+      if (result) {
+        setOpenModal(false);
+
+        await Swal.fire({
+          title: "Guardado",
+          text: `Centro de costo ${
+            modeEdit ? "actualizado" : "guardado"
+          } correctamente`,
+          icon: "success",
+          confirmButtonColor: "#14b8a6",
+        });
       }
-      Swal.fire(
-        "Guardado",
-        "Centro de costo ha sido guardado correctamente",
-        "success"
-      );
-      loadCostCenters();
-      setOpenModal(false);
     } catch (error) {
       Swal.fire("Error", (error as Error).message, "error");
     }
@@ -134,14 +114,18 @@ export const CostCentersProvider: React.FC<{
     if (result.isConfirmed) {
       try {
         // Realiza la solicitud de autenticación a tu API
-        await deleteCostCenter(costCenterSelected?._id as string);
-        Swal.fire(
-          "Eliminado!",
-          "Centro de costo ha sido eliminada.",
-          "success"
-        );
-        loadCostCenters();
-        setOpenModal(false);
+        const data = await deleteCostCenter(costCenterSelected?._id as string);
+
+        if (data) {
+          await Swal.fire({
+            title: "Eliminado",
+            text: `Centro de costo eliminado correctamente`,
+            icon: "success",
+            confirmButtonColor: "#14b8a6",
+          });
+          await loadCostCenters();
+          setOpenModal(false);
+        }
       } catch (error) {
         Swal.fire("Error", (error as Error).message, "error");
       }

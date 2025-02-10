@@ -1,9 +1,10 @@
-import React, { FC, use, useEffect } from "react";
+import React, { FC, useEffect } from "react";
 // mui material
 import {
   Box,
   Button,
   Divider,
+  FormHelperText,
   Grid2,
   IconButton,
   InputAdornment,
@@ -30,10 +31,10 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { JournalEntriesSchema } from "@/validations";
 import {
-  CostCenters,
+  ICostCentersAPI,
   IJournalEntriesForm,
   JournalEntriesFormProps,
-  LedgerAccount,
+  IChartAccountAPI,
 } from "@/types";
 import {
   MdOutlineAddCircle,
@@ -51,20 +52,15 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
   const router = useRouter();
 
   const [modeEdit, setModeEdit] = React.useState<boolean>(false);
-
-  const [ledgerAccounts, setLedgerAccounts] = React.useState<LedgerAccount[]>(
+  const [chartAccounts, setChartAccounts] = React.useState<IChartAccountAPI[]>(
     []
   );
-  const [costCenters, setCostCenters] = React.useState<CostCenters[]>([]);
+  const [costCenters, setCostCenters] = React.useState<ICostCentersAPI[]>([]);
 
   const { getAllAccounts } = useAccountApi();
   const { fetchCostCenters } = useCostCentersApi();
-  const {
-    saveJournalEntry,
-    updateJournalEntry,
-    errorAxios,
-    fetchFournalEntry,
-  } = useJournalEntriesApi();
+  const { saveJournalEntry, updateJournalEntry, fetchFournalEntry } =
+    useJournalEntriesApi();
 
   useEffect(() => {
     loadCombos();
@@ -95,7 +91,7 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
   const loadCombos = async () => {
     try {
       const accounts = await getAllAccounts();
-      setLedgerAccounts(accounts);
+      setChartAccounts(accounts);
 
       const costCenters = await fetchCostCenters();
       setCostCenters(costCenters);
@@ -112,7 +108,6 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
   } = useForm<IJournalEntriesForm>({
     resolver: yupResolver(JournalEntriesSchema),
     defaultValues: {
-      reference: "",
       description: "",
       date: dayjs().toDate(), // Fecha actual por defecto
       details: [],
@@ -139,24 +134,9 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
         router.push(
           `/management/accounting/journal-entries/${modeEdit ? id : result._id}`
         );
-      } else {
-        Swal.fire({
-          title: "Error!",
-          text: errorAxios,
-          icon: "error",
-          confirmButtonText: "Ok",
-          confirmButtonColor: "#14b8a6",
-        });
       }
     } catch (error) {
       console.error(error);
-      Swal.fire({
-        title: "Error!",
-        text: errorAxios,
-        icon: "error",
-        confirmButtonText: "Ok",
-        confirmButtonColor: "#14b8a6",
-      });
     }
   };
 
@@ -177,25 +157,7 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
   return (
     <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
       <Grid2 container spacing={1}>
-        <Grid2 size={{ xs: 6, sm: 6, lg: 3 }}>
-          <Controller
-            name="reference"
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label="Referencia"
-                variant="outlined"
-                margin="dense"
-                size="small"
-                error={!!errors.reference}
-                helperText={errors.reference?.message?.toString()}
-                disabled={modeEdit}
-              />
-            )}
-          />
-        </Grid2>
-        <Grid2 size={{ xs: 6, sm: 6, lg: 3 }}>
+        <Grid2 size={{ xs: 6, sm: 6, lg: 4 }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Controller
               name="date"
@@ -213,7 +175,7 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
             />
           </LocalizationProvider>
         </Grid2>
-        <Grid2 size={{ xs: 12, sm: 12, lg: 6 }}>
+        <Grid2 size={{ xs: 12, sm: 12, lg: 8 }}>
           <Controller
             name="description"
             control={control}
@@ -293,7 +255,7 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
                     }}
                   >
                     <Controller
-                      name={`details.${index}.ledgerAccount`}
+                      name={`details.${index}.account`}
                       control={control}
                       render={({ field }) => (
                         <TextField
@@ -303,13 +265,13 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
                           fullWidth
                           size="small"
                           select
-                          error={!!errors.details?.[index]?.ledgerAccount}
+                          error={!!errors.details?.[index]?.account}
                           helperText={errors.details?.[
                             index
-                          ]?.ledgerAccount?.message?.toString()}
+                          ]?.account?.message?.toString()}
                         >
                           <MenuItem value={""}>Vacio</MenuItem>
-                          {ledgerAccounts.map((account) => (
+                          {chartAccounts.map((account) => (
                             <MenuItem key={account._id} value={account._id}>
                               {account.code} - {account.name}
                             </MenuItem>
@@ -355,7 +317,7 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
                   </TableCell>
                   <TableCell>
                     <Controller
-                      name={`details.${index}.costCenter`}
+                      name={`details.${index}.cost_center`}
                       control={control}
                       render={({ field }) => (
                         <TextField
@@ -365,18 +327,18 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
                           fullWidth
                           size="small"
                           select
-                          error={!!errors.details?.[index]?.costCenter}
+                          error={!!errors.details?.[index]?.cost_center}
                           helperText={errors.details?.[
                             index
-                          ]?.costCenter?.message?.toString()}
+                          ]?.cost_center?.message?.toString()}
                         >
                           <MenuItem value={""}>Vacio</MenuItem>
-                          {costCenters.map((costCenter) => (
+                          {costCenters.map((cost_center) => (
                             <MenuItem
-                              key={costCenter._id}
-                              value={costCenter._id}
+                              key={cost_center._id}
+                              value={cost_center._id}
                             >
-                              {costCenter.name}
+                              {cost_center.name}
                             </MenuItem>
                           ))}
                         </TextField>
@@ -406,16 +368,19 @@ const JournalEntriesForm: FC<JournalEntriesFormProps> = ({ id }) => {
               </TableRow>
             </TableFooter>
           </Table>
+          <FormHelperText error={fields.length === 0}>
+            {fields.length === 0 ? "Debe ingresar al menos un detalle" : ""}
+          </FormHelperText>
           <Button
             type="button"
             variant="text"
             color="secondary"
             onClick={() =>
               append({
-                ledgerAccount: "",
+                account: "",
                 debit: 0,
                 credit: 0,
-                costCenter: "",
+                cost_center: "",
               })
             }
             sx={{ textTransform: "none" }}

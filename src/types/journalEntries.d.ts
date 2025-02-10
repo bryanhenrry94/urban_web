@@ -5,21 +5,19 @@ import {
 
 export interface IJournalEntries {
   _id: string;
-  reference: string;
-  description: string;
   date: Date;
+  description: string;
   details?: JournalEntriesDetail[];
 }
 
 export interface IJournalEntriesForm {
-  reference: string;
-  description: string;
   date: Date;
+  description: string;
   details: {
-    ledgerAccount: string;
+    account: string;
     debit: number;
     credit: number;
-    costCenter: string | null;
+    cost_center: string | null;
   }[];
 }
 

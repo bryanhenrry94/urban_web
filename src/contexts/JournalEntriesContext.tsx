@@ -19,15 +19,13 @@ type CostCentersType = {
   modeEdit: boolean;
   journalEntries: IJournalEntries[] | null;
   openModal: boolean;
-  journalEntrySelected: IJournalEntries | null;
+  rowSelected: IJournalEntries | null;
   search: string;
   setModeEdit: React.Dispatch<React.SetStateAction<boolean>>;
   loadJournalEntries: () => void;
   setOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   setRows: React.Dispatch<React.SetStateAction<IJournalEntries[] | null>>;
-  setJournalEntrySelected: React.Dispatch<
-    React.SetStateAction<IJournalEntries | null>
-  >;
+  setRowSelected: React.Dispatch<React.SetStateAction<IJournalEntries | null>>;
   handleFilter: (search: string) => void;
   handleSave: (data: IJournalEntriesForm) => void;
   handleDelete: () => void;
@@ -60,8 +58,7 @@ export const JournalEntriesProvider: React.FC<{
     IJournalEntries[] | null
   >(null);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [journalEntrySelected, setJournalEntrySelected] =
-    useState<IJournalEntries | null>(null);
+  const [rowSelected, setRowSelected] = useState<IJournalEntries | null>(null);
 
   useEffect(() => {
     if (status == "authenticated") {
@@ -74,10 +71,8 @@ export const JournalEntriesProvider: React.FC<{
   }, [search]);
 
   const handleFilter = () => {
-    const filteredRows = journalEntries?.filter(
-      (costCenter) =>
-        costCenter?.reference.toLowerCase().includes(search.toLowerCase()) ||
-        costCenter?.description?.toLowerCase().includes(search.toLowerCase())
+    const filteredRows = journalEntries?.filter((costCenter) =>
+      costCenter?.description?.toLowerCase().includes(search.toLowerCase())
     );
 
     setRows(filteredRows || []);
@@ -88,8 +83,8 @@ export const JournalEntriesProvider: React.FC<{
     try {
       const data = await fetchJournalEntries();
       setJournalEntries(data);
-
       handleFilter();
+      setOpenModal(false);
     } catch (error) {
       console.error("Error fetching chart of journalEntries:", error);
     } finally {
@@ -100,23 +95,22 @@ export const JournalEntriesProvider: React.FC<{
   const handleSave = async (data: IJournalEntriesForm) => {
     try {
       if (modeEdit) {
-        console.log(
-          "journalEntrySelected?._id as string",
-          journalEntrySelected?._id as string
-        );
+        console.log("rowSelected?._id as string", rowSelected?._id as string);
         console.log("data", data);
 
-        await updateJournalEntry(journalEntrySelected?._id as string, data);
+        await updateJournalEntry(rowSelected?._id as string, data);
       } else {
         await saveJournalEntry(data);
       }
-      Swal.fire(
-        "Guardado",
-        "Centro de costo ha sido guardado correctamente",
-        "success"
-      );
-      loadJournalEntries();
-      setOpenModal(false);
+
+      await Swal.fire({
+        icon: "success",
+        title: "Guardado",
+        text: "Asiento contable ha sido guardado correctamente",
+        confirmButtonColor: "#14b8a6",
+      });
+
+      await loadJournalEntries();
     } catch (error) {
       Swal.fire("Error", (error as Error).message, "error");
     }
@@ -136,14 +130,17 @@ export const JournalEntriesProvider: React.FC<{
     if (result.isConfirmed) {
       try {
         // Realiza la solicitud de autenticación a tu API
-        await deleteJournalEntry(journalEntrySelected?._id as string);
-        Swal.fire(
-          "Eliminado!",
-          "Centro de costo ha sido eliminada.",
-          "success"
-        );
-        loadJournalEntries();
-        setOpenModal(false);
+        const data = await deleteJournalEntry(rowSelected?._id as string);
+
+        if (data) {
+          await Swal.fire({
+            icon: "success",
+            title: "Eliminado",
+            text: "Periodo eliminado correctamente",
+            confirmButtonColor: "#14b8a6",
+          });
+          await loadJournalEntries();
+        }
       } catch (error) {
         Swal.fire("Error", (error as Error).message, "error");
       }
@@ -169,11 +166,11 @@ export const JournalEntriesProvider: React.FC<{
       journalEntries,
       openModal,
       modeEdit,
-      journalEntrySelected,
+      rowSelected,
       search,
       setRows,
       setOpenModal,
-      setJournalEntrySelected,
+      setRowSelected,
       loadJournalEntries,
       setModeEdit,
       handleFilter,
@@ -182,15 +179,7 @@ export const JournalEntriesProvider: React.FC<{
       handleEdit,
       setSearch,
     }),
-    [
-      rows,
-      isLoading,
-      journalEntries,
-      openModal,
-      modeEdit,
-      journalEntrySelected,
-      search,
-    ]
+    [rows, isLoading, journalEntries, openModal, modeEdit, rowSelected, search]
   );
 
   return (

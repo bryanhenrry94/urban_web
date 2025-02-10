@@ -58,6 +58,7 @@ export const ChartOfAccountsProvider: React.FC<{
     setIsLoading(true);
     try {
       const data = await getAllAccounts();
+      console.log("data", data);
       setAccounts(data);
     } catch (error) {
       console.error("Error fetching chart of accounts:", error);
@@ -70,6 +71,8 @@ export const ChartOfAccountsProvider: React.FC<{
     setIsLoading(true);
     try {
       const data = await getAllAccountsTree();
+      console.log("data tree", data);
+
       setAccountsTree(data);
     } catch (error) {
       console.error("Error fetching chart of accounts:", error);

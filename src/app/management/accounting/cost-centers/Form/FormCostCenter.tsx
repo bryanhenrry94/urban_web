@@ -6,44 +6,44 @@ import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CostCenterSchema } from "@/validations";
 import { useChartOfAccountsContext } from "@/contexts/CostCentersContext";
-import { CostCenters } from "@/types/costCenters";
+import { ICostCenters } from "@/types";
 
 interface FormProps {
   handleCancel: () => void;
 }
 
 const FormCostCenter: React.FC<FormProps> = ({ handleCancel }) => {
-  const { handleSave, costCenterSelected } = useChartOfAccountsContext();
+  const { handleSave, costCenterSelected, modeEdit } =
+    useChartOfAccountsContext();
 
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<CostCenters>({
+  } = useForm<ICostCenters>({
     resolver: yupResolver(CostCenterSchema),
     defaultValues: {
       name: "",
-      description: "",
     },
   });
 
   useEffect(() => {
     if (costCenterSelected) {
-      const { name, description } = costCenterSelected;
+      const { name } = costCenterSelected;
 
-      reset({ name, description });
+      reset({ name });
     } else reset();
   }, [costCenterSelected, control]);
 
-  const onSubmit = (data: CostCenters) => {
-    handleSave(data);
+  const onSubmit = async (data: ICostCenters) => {
+    await handleSave(data);
   };
 
   return (
     <Box component={"form"} onSubmit={handleSubmit(onSubmit)}>
       <Typography variant="h6" textAlign={"center"}>
-        Centro de Costo
+        {modeEdit ? "Editar" : "Crear"} Centro de Costo
       </Typography>
 
       <Controller
@@ -59,22 +59,6 @@ const FormCostCenter: React.FC<FormProps> = ({ handleCancel }) => {
             size="small"
             error={!!errors.name}
             helperText={errors.name?.message?.toString()}
-          />
-        )}
-      />
-      <Controller
-        name="description"
-        control={control}
-        render={({ field }) => (
-          <TextField
-            {...field}
-            label="Descripción"
-            variant="outlined"
-            margin="dense"
-            fullWidth
-            size="small"
-            error={!!errors.description}
-            helperText={errors.description?.message?.toString()}
           />
         )}
       />

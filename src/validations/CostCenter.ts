@@ -1,6 +1,5 @@
 import * as Yup from "yup";
 
 export const CostCenterSchema = Yup.object().shape({
-  name: Yup.string().required("Name is required"),
-  description: Yup.string().required("Description is required"),
+  name: Yup.string().required("El nombre es requerido"),
 });
